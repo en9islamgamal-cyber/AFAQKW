@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, ArrowLeft, MapPin, Layers, Calendar, DollarSign } from 'lucide-react';
+import { ArrowRight, ArrowLeft, MapPin, Layers, Calendar, ShieldCheck } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,36 +38,39 @@ const ProjectSpotlightSection = ({ className = '' }: ProjectSpotlightSectionProp
   }, [isAr]);
 
   const metrics = isAr ? [
-    { icon: DollarSign, label: 'قيمة العقد', value: '—' },
-    { icon: MapPin, label: 'المساحة', value: '150,000+ م²' },
-    { icon: Layers, label: 'الأنظمة', value: 'تكييف / حريق / كهرباء / سباكة' },
-    { icon: Calendar, label: 'التسليم', value: 'في الموعد المحدد' },
+    { icon: MapPin, label: 'الموقع', value: 'حولي، الكويت' },
+    { icon: Layers, label: 'الأنظمة', value: 'تهوية الحريق / مراوح سحب الدخان' },
+    { icon: ShieldCheck, label: 'الاعتماد', value: 'الإدارة العامة للإطفاء (KFF)' },
+    { icon: Calendar, label: 'حالة المشروع', value: 'تم التسليم' },
   ] : [
-    { icon: DollarSign, label: 'Contract value', value: '—' },
-    { icon: MapPin, label: 'Area', value: '150,000+ m²' },
-    { icon: Layers, label: 'Systems', value: 'HVAC / Fire / Electrical / Plumbing' },
-    { icon: Calendar, label: 'Delivery', value: 'On schedule' },
+    { icon: MapPin, label: 'Location', value: 'Hawally, Kuwait' },
+    { icon: Layers, label: 'Systems', value: 'Fire Ventilation / Smoke Exhaust Fans' },
+    { icon: ShieldCheck, label: 'Compliance', value: 'Kuwait Fire Force (KFF)' },
+    { icon: Calendar, label: 'Status', value: 'Delivered' },
   ];
 
   return (
     <section id="projects" ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/mall_interior.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      {/* تغيير صورة الخلفية: حط مسار صورة مجمع العثمان الجديدة هنا 
+        مثلاً: url(/othman_complex.jpg)
+      */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/othman_complex.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 hero-gradient" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
         <div ref={headlineRef} className={`max-w-[44vw] ${isAr ? 'text-right' : 'text-left'}`}>
           <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
-            {isAr ? 'قطر' : 'Mall of'}<br />
-            <span className="text-primary">{isAr ? 'مول.' : 'Qatar.'}</span>
+            {isAr ? 'مجمع' : 'Al-Othman'}<br />
+            <span className="text-primary">{isAr ? 'العثمان.' : 'Complex.'}</span>
           </h2>
           <p className={`text-body text-gray-cool max-w-[34vw] leading-relaxed ${isAr ? 'text-lg' : ''}`}>
-            {isAr ? 'تنسيق كامل للأعمال الكهروميكانيكية والتشطيبات لواحد من أكبر الوجهات التجارية في المنطقة.' : "Full MEP coordination and fit-out support for one of the region's largest retail destinations."}
+            {isAr ? 'توريد وتركيب أنظمة تهوية الحريق ومراوح سحب الدخان (Smoke Exhaust Fans)، وتأسيس دكتات الصاج المجلفن وفقاً لأعلى معايير السلامة.' : "Supply and installation of advanced fire ventilation and rooftop smoke exhaust fan systems, featuring heavy-duty galvanized steel ductwork."}
           </p>
         </div>
 
         <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
           <h3 className={`font-heading text-lg text-white mb-6 ${isAr ? 'font-bold' : 'font-semibold'}`}>
-            {isAr ? 'إحصائيات المشروع' : 'Project Metrics'}
+            {isAr ? 'إحصائيات وتفاصيل المشروع' : 'Project Metrics'}
           </h3>
           <div className="space-y-0">
             {metrics.map((metric, index) => (
@@ -81,14 +84,14 @@ const ProjectSpotlightSection = ({ className = '' }: ProjectSpotlightSectionProp
             ))}
           </div>
           <button className={`mt-6 inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
-            {isAr ? 'اقرأ دراسة الحالة (Case Study)' : 'Read the case study'}
+            {isAr ? 'عرض تفاصيل الأعمال (Gallery)' : 'View Project Gallery'}
             {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           </button>
         </div>
 
         <div ref={microLabelRef} className={`absolute bottom-[10vh] ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
           <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
-            {isAr ? 'تجاري • ضيافة وفنادق • رعاية صحية • صناعي' : 'Retail • Hospitality • Healthcare • Industrial'}
+            {isAr ? 'مشاريع تجارية • أنظمة مكافحة الحريق • إلكتروميكانيك' : 'Commercial • Fire Fighting Systems • MEP'}
           </span>
         </div>
       </div>
