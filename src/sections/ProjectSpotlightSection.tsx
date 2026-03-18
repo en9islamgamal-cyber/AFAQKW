@@ -40,7 +40,7 @@ const ProjectSpotlightSection = ({ className = '' }: ProjectSpotlightSectionProp
   const metrics = isAr ? [
     { icon: MapPin, label: 'الموقع', value: 'حولي، الكويت' },
     { icon: Layers, label: 'الأنظمة', value: 'تهوية الحريق / مراوح سحب الدخان' },
-    { icon: ShieldCheck, label: 'الاعتماد', value: 'الإدارة العامة للإطفاء (KFF)' },
+    { icon: ShieldCheck, label: 'الاعتماد', value: 'قوة الاطفاء العام (KFF)' },
     { icon: Calendar, label: 'حالة المشروع', value: 'تم التسليم' },
   ] : [
     { icon: MapPin, label: 'Location', value: 'Hawally, Kuwait' },
