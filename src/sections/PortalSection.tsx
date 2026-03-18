@@ -105,7 +105,11 @@ const PortalSection = ({ className = '' }: PortalSectionProps) => {
             ))}
           </div>
 
-          <button className={`w-full inline-flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors ${isAr ? 'flex-row-reverse' : ''}`}>
+          {/* التعديل هنا: الزرار الآن يفتح صفحة تسجيل الدخول */}
+          <button 
+            onClick={() => window.location.hash = '#login'}
+            className={`w-full inline-flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors ${isAr ? 'flex-row-reverse' : ''}`}
+          >
             {isAr ? 'اطلب صلاحية الدخول للبوابة' : 'Request portal access'}
             {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           </button>
