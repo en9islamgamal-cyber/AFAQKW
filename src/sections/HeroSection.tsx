@@ -71,7 +71,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   return (
     <section ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/hero_night_cranes.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      {/* هنا تم تعديل مسار الصورة ليقرأ صورة شاليهات الخيران */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/khiran_chalets.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 hero-gradient" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
