@@ -107,8 +107,12 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             <div className="status-dot" />
             <span className="font-mono text-xs uppercase tracking-wider text-gray-cool">{isAr ? 'مشروع حالي' : 'Active Project'}</span>
           </div>
-          <h3 className={`font-heading text-xl font-bold text-white mb-3 ${isAr ? '' : 'font-semibold'}`}>{isAr ? 'قطر مول' : 'Mall of Qatar'}</h3>
-          <p className="text-sm text-gray-cool mb-4 leading-relaxed">{isAr ? 'تسليم حزمة الأعمال الكهروميكانيكية في الموعد المحدد، مع متابعة دقيقة لسير العمل وتوثيق هندسي شامل.' : 'MEP package delivery on schedule with live progress tracking and comprehensive documentation.'}</p>
+          <h3 className={`font-heading text-xl font-bold text-white mb-3 ${isAr ? '' : 'font-semibold'}`}>
+            {isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets in Al Khiran'}
+          </h3>
+          <p className="text-sm text-gray-cool mb-4 leading-relaxed">
+            {isAr ? 'اعمال التكييف المركزي والخدمات الهندسية والتشطيبات الداخلية لعدد ١٢ شاليه فاخر بمنطقة الخيران.' : 'Central air conditioning, engineering services, and interior finishes for 12 luxury chalets in Al Khiran.'}
+          </p>
           <button onClick={() => scrollToSection('#projects')} className={`inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
             {isAr ? 'عرض تفاصيل المشروع' : 'View project details'}
             {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
