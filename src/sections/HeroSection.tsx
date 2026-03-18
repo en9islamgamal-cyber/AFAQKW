@@ -71,8 +71,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   return (
     <section ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      {/* هنا تم تعديل مسار الصورة ليقرأ صورة شاليهات الخيران */}
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/khiran_chalets.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      {/* رجعنا الخلفية الأساسية زي ما كانت للأوناش */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/hero_night_cranes.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 hero-gradient" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
@@ -103,21 +103,33 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           </div>
         </div>
 
-        <div ref={cardRef} className={`absolute top-[18vh] w-full max-w-[380px] lg:w-[28vw] glass-card rounded-xl p-6 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <div className={`flex items-center gap-3 mb-4 ${isAr ? 'justify-start' : ''}`}>
-            <div className="status-dot" />
-            <span className="font-mono text-xs uppercase tracking-wider text-gray-cool">{isAr ? 'مشروع حالي' : 'Active Project'}</span>
+        {/* كارت المشروع ضفناله صورة الشاليهات في الخلفية مع دمج لوني غامق شوية عشان الكلام يوضح */}
+        <div 
+          ref={cardRef} 
+          className={`absolute top-[18vh] w-full max-w-[380px] lg:w-[28vw] rounded-xl p-6 border border-white/10 overflow-hidden ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}
+          style={{
+            backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url(/khiran_chalets.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+          }}
+        >
+          <div className="relative z-10">
+            <div className={`flex items-center gap-3 mb-4 ${isAr ? 'justify-start' : ''}`}>
+              <div className="status-dot" />
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-cool">{isAr ? 'مشروع حالي' : 'Active Project'}</span>
+            </div>
+            <h3 className={`font-heading text-xl font-bold text-white mb-3 ${isAr ? '' : 'font-semibold'}`}>
+              {isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets in Al Khiran'}
+            </h3>
+            <p className="text-sm text-gray-cool mb-4 leading-relaxed">
+              {isAr ? 'اعمال التكييف المركزي والخدمات الهندسية والتشطيبات الداخلية لعدد ١٢ شاليه فاخر بمنطقة الخيران.' : 'Central air conditioning, engineering services, and interior finishes for 12 luxury chalets in Al Khiran.'}
+            </p>
+            <button onClick={() => scrollToSection('#projects')} className={`inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
+              {isAr ? 'عرض تفاصيل المشروع' : 'View project details'}
+              {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+            </button>
           </div>
-          <h3 className={`font-heading text-xl font-bold text-white mb-3 ${isAr ? '' : 'font-semibold'}`}>
-            {isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets in Al Khiran'}
-          </h3>
-          <p className="text-sm text-gray-cool mb-4 leading-relaxed">
-            {isAr ? 'اعمال التكييف المركزي والخدمات الهندسية والتشطيبات الداخلية لعدد ١٢ شاليه فاخر بمنطقة الخيران.' : 'Central air conditioning, engineering services, and interior finishes for 12 luxury chalets in Al Khiran.'}
-          </p>
-          <button onClick={() => scrollToSection('#projects')} className={`inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
-            {isAr ? 'عرض تفاصيل المشروع' : 'View project details'}
-            {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-          </button>
         </div>
       </div>
     </section>
