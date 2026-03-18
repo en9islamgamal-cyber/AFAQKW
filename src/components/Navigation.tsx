@@ -25,19 +25,27 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // تعديل الروابط لربط البوابة بصفحة اللوجين
   const navLinks = language === 'EN' ? [
     { label: 'Services', href: '#services' },
     { label: 'Projects', href: '#projects' },
-    { label: 'Portal', href: '#portal' },
+    { label: 'Portal', href: '#login' }, // غيرنا دي لـ #login
     { label: 'Contact', href: '#contact' },
   ] : [
     { label: 'خدماتنا', href: '#services' },
     { label: 'مشاريعنا', href: '#projects' },
-    { label: 'البوابة', href: '#portal' },
+    { label: 'البوابة', href: '#login' }, // غيرنا دي لـ #login
     { label: 'اتصل بنا', href: '#contact' },
   ];
 
   const scrollToSection = (href: string) => {
+    // لو اللينك هو اللوجين، بنغير الهاش بتاع المتصفح وهو هيفتح لوحده من App.tsx
+    if (href === '#login') {
+      window.location.hash = '#login';
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -48,7 +56,7 @@ const Navigation = () => {
   const toggleLanguage = () => {
     const newLang = language === 'EN' ? 'AR' : 'EN';
     localStorage.setItem('lang', newLang);
-    window.location.reload(); // التحديث السريع اللي بيحمي الأنيميشن
+    window.location.reload(); 
   };
 
   return (
