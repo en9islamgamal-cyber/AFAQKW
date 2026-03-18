@@ -51,10 +51,11 @@ const ProjectSpotlightSection = ({ className = '' }: ProjectSpotlightSectionProp
 
   return (
     <section id="projects" ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      {/* تغيير صورة الخلفية: حط مسار صورة مجمع العثمان الجديدة هنا 
-        مثلاً: url(/othman_complex.jpg)
-      */}
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/othman_complex.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div 
+        ref={bgRef} 
+        className="absolute inset-0 w-full h-full" 
+        style={{ backgroundImage: 'url(/othman_complex.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} 
+      />
       <div className="absolute inset-0 hero-gradient" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
