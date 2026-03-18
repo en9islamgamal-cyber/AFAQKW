@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navigation from './components/Navigation';
@@ -12,14 +12,39 @@ import ProcessSection from './sections/ProcessSection';
 import PortalSection from './sections/PortalSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './components/Footer';
+import ClientLogin from './sections/ClientLogin'; // ضفنا ملف اللوجين هنا
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const mainRef = useRef<HTMLDivElement>(null);
+  
+  // المتغير ده هو اللي بيحدد هنعرض الموقع ولا صفحة الدخول
+  const [showLogin, setShowLogin] = useState(false);
 
+  // مراقب الروابط: أول ما يلمح #login بيعرض البوابة
   useEffect(() => {
-    // Wait for all sections to mount and create their ScrollTriggers
+    const handleHashChange = () => {
+      if (window.location.hash === '#login') {
+        setShowLogin(true);
+        // نطلع العميل لأول الصفحة عشان اللوجين يظهر مظبوط
+        window.scrollTo(0, 0);
+      } else {
+        setShowLogin(false);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // عشان لو العميل داخل من لينك مباشر للبوابة
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // كود الأنيميشن الأصلي بتاعك (GSAP)
+  useEffect(() => {
+    // لو إحنا في صفحة الدخول، مش محتاجين نشغل أنيميشن الموقع
+    if (showLogin) return;
+
     const timer = setTimeout(() => {
       const pinned = ScrollTrigger.getAll()
         .filter(st => st.vars.pin)
@@ -58,8 +83,14 @@ function App() {
       clearTimeout(timer);
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
-  }, []);
+  }, [showLogin]); // ضفنا showLogin هنا عشان يترستر لما نرجع للموقع
 
+  // لو العميل طلب الدخول، نعرضله صفحة البوابة بس
+  if (showLogin) {
+    return <ClientLogin onBack={() => { window.location.hash = ''; }} />;
+  }
+
+  // ده الموقع الرئيسي بتاعك
   return (
     <div ref={mainRef} className="relative bg-navy-900 min-h-screen">
       {/* Noise Overlay */}
@@ -88,3 +119,4 @@ function App() {
 }
 
 export default App;
+
