@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, ShieldCheck, ArrowLeft } from 'lucide-react';
 
 interface ClientLoginProps {
-  onBack?: () => void; // دي عشان لو حابب تربطها بزرار الرجوع للرئيسية
+  onBack?: () => void;
+  onLogin?: () => void; // دي الإضافة الجديدة عشان تنقلنا للداشبورد
 }
 
-const ClientLogin = ({ onBack }: ClientLoginProps) => {
+const ClientLogin = ({ onBack, onLogin }: ClientLoginProps) => { // ضفنا onLogin هنا
   const isAr = (localStorage.getItem('lang') || 'EN') === 'AR';
   
   const [email, setEmail] = useState('');
@@ -18,8 +19,11 @@ const ClientLogin = ({ onBack }: ClientLoginProps) => {
     // هنا بعدين هنحط كود الربط بقاعدة البيانات (Firebase / Supabase)
     setTimeout(() => {
       setIsLoading(false);
-      alert(isAr ? 'تم تسجيل الدخول بنجاح! (سيتم تحويلك للداش بورد قريباً)' : 'Login successful! (Redirecting to dashboard...)');
-    }, 1500);
+      // شلنا الـ alert وحطينا دي عشان تنفذ الانتقال
+      if (onLogin) {
+          onLogin(); 
+      }
+    }, 1500); // تأخير وهمي ثانية ونص عشان نحس بـ Loading
   };
 
   return (
