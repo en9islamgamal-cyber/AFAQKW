@@ -1,31 +1,26 @@
 import React, { useState } from 'react';
-import ClientLogin from './ClientLogin'; // مسار صفحة الدخول بتاعتك اللي في الصورة
+import ClientLogin from './ClientLogin'; 
 import ClientDashboard from './ClientDashboard';
 
-const CustomerPortal = () => {
-  // متغير لحفظ حالة تسجيل الدخول: هل العميل سجل دخول ولا لأ؟
+// ضفنا استقبال onBack هنا
+const CustomerPortal = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // دالة وهمية بتشتغل لما العميل يدوس "دخول آمن"
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // هنا في المستقبل هنتأكد من الباسوورد من الداتا بيز
-    // حالياً هنخليه يدخل على طول للتجربة
+  const handleLogin = () => {
     setIsAuthenticated(true);
   };
 
-  // دالة تسجيل الخروج
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
 
   return (
-    <div>
-      {/* لو مسجل دخول اعرض لوحة التحكم، لو لأ اعرض شاشة الدخول */}
+    <div className="w-full min-h-screen">
       {isAuthenticated ? (
         <ClientDashboard onLogout={handleLogout} />
       ) : (
-        <ClientLogin onLogin={handleLogin} />
+        // مررنا onBack لصفحة اللوجين
+        <ClientLogin onLogin={handleLogin} onBack={onBack} />
       )}
     </div>
   );
