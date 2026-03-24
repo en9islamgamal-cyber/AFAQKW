@@ -17,10 +17,10 @@ const projectData = {
     paid: "30,000 د.ك",
     remaining: "20,000 د.ك"
   },
-  photos: [
-    "https://images.unsplash.com/photo-1541888081643-eb0429a32c45?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400&auto=format&fit=crop"
+photos: [
+    "https://images.pexels.com/photos/110813/pexels-photo-110813.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/2244746/pexels-photo-2244746.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=800"
   ]
 };
 
