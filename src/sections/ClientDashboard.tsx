@@ -18,12 +18,8 @@ const projectData = {
     remaining: "20,000 د.ك"
   },
 photos: [
-    // الصورة الأولى (القديمة الممتازة - هنسيبها)
-    "https://images.unsplash.com/photo-1541888081643-eb0429a32c45?q=80&w=400&auto=format&fit=crop",
-    // الصورة التانية (القديمة الممتازة - هنسيبها)
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=400&auto=format&fit=crop",
-    // الصورة التالتة (البديلة للمكسورة - واجهة فيلا أو تشطيبات تناسب ستايل الشركة)
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=400&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400&auto=format&fit=crop"
   ]
 };
 
