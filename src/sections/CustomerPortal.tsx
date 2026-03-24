@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ClientLogin from './ClientLogin'; 
 import ClientDashboard from './ClientDashboard';
 
-// ضفنا استقبال onBack هنا
-const CustomerPortal = ({ onBack }) => {
+// تحديد نوع الـ Props عشان TypeScript ما يزعلش
+interface CustomerPortalProps {
+  onBack?: () => void;
+}
+
+const CustomerPortal = ({ onBack }: CustomerPortalProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = () => {
@@ -19,7 +23,6 @@ const CustomerPortal = ({ onBack }) => {
       {isAuthenticated ? (
         <ClientDashboard onLogout={handleLogout} />
       ) : (
-        // مررنا onBack لصفحة اللوجين
         <ClientLogin onLogin={handleLogin} onBack={onBack} />
       )}
     </div>
