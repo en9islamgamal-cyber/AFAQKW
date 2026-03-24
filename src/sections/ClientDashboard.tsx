@@ -1,8 +1,12 @@
-import React from 'react';
-// مسحنا استدعاء مكتبة الدائرة من هنا
+// مسحنا استدعاء React من هنا
 import { Users, Wallet, Camera, LogOut, FileText, CheckCircle } from 'lucide-react';
 
-// بيانات وهمية للتجربة (في المستقبل هتيجي من الـ Backend)
+// تحديد نوع الـ Props
+interface ClientDashboardProps {
+  onLogout: () => void;
+}
+
+// بيانات وهمية للتجربة
 const projectData = {
   clientName: "م. إسلام",
   projectName: "فيلا السالمية",
@@ -20,7 +24,8 @@ const projectData = {
   ]
 };
 
-const ClientDashboard = ({ onLogout }) => {
+// ضفنا النوع هنا
+const ClientDashboard = ({ onLogout }: ClientDashboardProps) => {
   return (
     <div className="min-h-screen bg-[#0f1115] text-white p-4 md:p-8" dir="rtl">
       
@@ -41,10 +46,9 @@ const ClientDashboard = ({ onLogout }) => {
         </button>
       </header>
 
-      {/* الكروت الإحصائية (Stats Grid) */}
+      {/* الكروت الإحصائية */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         
-        {/* كارت نسبة الإنجاز */}
         <div className="bg-[#161a23] p-6 rounded-2xl border border-gray-800 shadow-lg flex flex-col items-center justify-center">
           <h3 className="text-gray-400 text-sm font-medium mb-4 flex items-center gap-2 w-full">
             <CheckCircle size={18} className="text-[#f97316]" /> نسبة الإنجاز
@@ -63,7 +67,6 @@ const ClientDashboard = ({ onLogout }) => {
           </div>
         </div>
 
-        {/* كارت الدفعات المالية */}
         <div className="bg-[#161a23] p-6 rounded-2xl border border-gray-800 shadow-lg">
           <h3 className="text-gray-400 text-sm font-medium mb-4 flex items-center gap-2">
             <Wallet size={18} className="text-[#f97316]" /> الموقف المالي
@@ -84,7 +87,6 @@ const ClientDashboard = ({ onLogout }) => {
           </div>
         </div>
 
-        {/* كارت العمالة اليومية */}
         <div className="bg-[#161a23] p-6 rounded-2xl border border-gray-800 shadow-lg flex flex-col justify-center items-center text-center">
           <h3 className="text-gray-400 text-sm font-medium mb-4 flex items-center gap-2 w-full justify-start">
             <Users size={18} className="text-[#f97316]" /> العمالة في الموقع (اليوم)
@@ -97,7 +99,7 @@ const ClientDashboard = ({ onLogout }) => {
 
       </div>
 
-      {/* معرض الصور (Site Photos) */}
+      {/* معرض الصور */}
       <div className="bg-[#161a23] p-6 rounded-2xl border border-gray-800 shadow-lg">
         <h3 className="text-white font-bold mb-6 flex items-center gap-2 text-lg">
           <Camera size={22} className="text-[#f97316]" /> تحديثات الموقع المصورة
