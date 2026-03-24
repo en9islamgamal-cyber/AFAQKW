@@ -12,22 +12,20 @@ import ProcessSection from './sections/ProcessSection';
 import PortalSection from './sections/PortalSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './components/Footer';
-import ClientLogin from './sections/ClientLogin'; // ضفنا ملف اللوجين هنا
+// التعديل الأول: استدعينا CustomerPortal بدل ClientLogin
+import CustomerPortal from './sections/CustomerPortal'; 
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const mainRef = useRef<HTMLDivElement>(null);
   
-  // المتغير ده هو اللي بيحدد هنعرض الموقع ولا صفحة الدخول
   const [showLogin, setShowLogin] = useState(false);
 
-  // مراقب الروابط: أول ما يلمح #login بيعرض البوابة
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#login') {
         setShowLogin(true);
-        // نطلع العميل لأول الصفحة عشان اللوجين يظهر مظبوط
         window.scrollTo(0, 0);
       } else {
         setShowLogin(false);
@@ -35,14 +33,12 @@ function App() {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // عشان لو العميل داخل من لينك مباشر للبوابة
+    handleHashChange();
 
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // كود الأنيميشن الأصلي بتاعك (GSAP)
   useEffect(() => {
-    // لو إحنا في صفحة الدخول، مش محتاجين نشغل أنيميشن الموقع
     if (showLogin) return;
 
     const timer = setTimeout(() => {
@@ -83,23 +79,17 @@ function App() {
       clearTimeout(timer);
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
-  }, [showLogin]); // ضفنا showLogin هنا عشان يترستر لما نرجع للموقع
+  }, [showLogin]);
 
-  // لو العميل طلب الدخول، نعرضله صفحة البوابة بس
+  // التعديل التاني: عرض CustomerPortal ومررنا ليه زرار الرجوع
   if (showLogin) {
-    return <ClientLogin onBack={() => { window.location.hash = ''; }} />;
+    return <CustomerPortal onBack={() => { window.location.hash = ''; }} />;
   }
 
-  // ده الموقع الرئيسي بتاعك
   return (
     <div ref={mainRef} className="relative bg-navy-900 min-h-screen">
-      {/* Noise Overlay */}
       <div className="noise-overlay" />
-      
-      {/* Navigation */}
       <Navigation />
-      
-      {/* Main Content */}
       <main className="relative">
         <HeroSection className="z-10" />
         <CapabilitiesSection className="z-20" />
@@ -111,12 +101,9 @@ function App() {
         <PortalSection className="z-[80]" />
         <ContactSection className="z-[90]" />
       </main>
-      
-      {/* Footer */}
       <Footer />
     </div>
   );
 }
 
 export default App;
-
