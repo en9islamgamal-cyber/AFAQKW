@@ -1,6 +1,5 @@
 import React from 'react';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css'; // لو حابب شكل دائري للإنجاز (اختياري)
+// مسحنا استدعاء مكتبة الدائرة من هنا
 import { Users, Wallet, Camera, LogOut, FileText, CheckCircle } from 'lucide-react';
 
 // بيانات وهمية للتجربة (في المستقبل هتيجي من الـ Backend)
