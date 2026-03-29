@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-// السطر ده بيستدعي ملف الربط اللي لسه عاملينه
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase'; 
 
-export default function ClientDashboard() {
+// هنا عرفنا الداش بورد إنها تستقبل خاصية onLogout من غير ما الـ TypeScript يزعل
+export default function ClientDashboard({ onLogout }: { onLogout?: () => void }) {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProjects() {
       try {
-        // بنسحب كل البيانات من جدول المشاريع وبنرتبها من الأحدث للأقدم
         const { data, error } = await supabase
           .from('projects')
           .select('*')
@@ -29,7 +28,18 @@ export default function ClientDashboard() {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans" dir="rtl">
-      <h1 className="text-3xl font-bold mb-6 text-blue-900">إدارة مشاريع آفاق للتطوير</h1>
+      {/* ضفنا زرار تسجيل الخروج جنب العنوان */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-blue-900">إدارة مشاريع آفاق للتطوير</h1>
+        {onLogout && (
+          <button 
+            onClick={onLogout} 
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300 font-bold shadow"
+          >
+            تسجيل الخروج
+          </button>
+        )}
+      </div>
       
       {loading ? (
         <div className="flex justify-center items-center h-40">
@@ -47,7 +57,6 @@ export default function ClientDashboard() {
               <p className="text-gray-600 mb-1">📍 الموقع: {project.location || 'غير محدد'}</p>
               <p className="text-gray-600 mb-4">🛠️ الحالة: <span className="font-semibold text-blue-600">{project.status}</span></p>
               
-              {/* شريط نسبة الإنجاز */}
               <div className="w-full bg-gray-200 rounded-full h-3 mb-2 overflow-hidden">
                 <div 
                   className="bg-blue-600 h-3 rounded-full transition-all duration-1000" 
