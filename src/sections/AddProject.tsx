@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
-// استدعاء دالة إنشاء الاتصال عشان نعمل "العميل الخفي"
 import { createClient } from '@supabase/supabase-js'; 
 
 export default function AddProject() {
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
-  const [clientPassword, setClientPassword] = useState(''); // خانة الباسوورد الجديدة
+  const [clientPassword, setClientPassword] = useState('');
   const [workType, setWorkType] = useState('');
   const [location, setLocation] = useState('');
   const [message, setMessage] = useState('');
@@ -24,12 +23,11 @@ export default function AddProject() {
     setMessage('⏳ جاري تأسيس الحساب والمشروع...');
 
     try {
-      // 1. الخدعة البرمجية: إنشاء حساب العميل في الخلفية بدون تسجيل خروج الأدمن
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
       const tempClient = createClient(supabaseUrl, supabaseAnonKey, {
-        auth: { persistSession: false } // الأمر ده بيمنع سوبابيز يخرجك من حسابك
+        auth: { persistSession: false }
       });
 
       const { error: authError } = await tempClient.auth.signUp({
@@ -39,7 +37,6 @@ export default function AddProject() {
 
       if (authError) throw authError;
 
-      // 2. تسجيل بيانات المشروع في جدول المشاريع (Projects)
       const { error: dbError } = await supabase
         .from('projects')
         .insert([{ 
@@ -67,6 +64,9 @@ export default function AddProject() {
     }
   };
 
+  // كلاس موحد للخانات عشان نضمن إن الخط غامق وواضح
+  const inputStyles = "w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none text-slate-900 bg-white placeholder-slate-400 font-bold";
+
   return (
     <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100" dir="rtl">
       <div className="mb-8 border-b border-slate-100 pb-4">
@@ -81,40 +81,39 @@ export default function AddProject() {
           {/* اسم العميل */}
           <div>
             <label className="block text-slate-700 font-bold mb-2">اسم العميل / الشركة</label>
-            <input type="text" required value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="مثال: شركة آفاق" className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none" />
+            <input type="text" required value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="مثال: شركة آفاق" className={inputStyles} />
           </div>
           
           {/* عنوان المشروع */}
           <div>
             <label className="block text-slate-700 font-bold mb-2">عنوان المشروع</label>
-            <input type="text" required value={location} onChange={(e) => setLocation(e.target.value)} placeholder="الكويت - الخيران" className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none" />
+            <input type="text" required value={location} onChange={(e) => setLocation(e.target.value)} placeholder="الكويت - الخيران" className={inputStyles} />
           </div>
 
           {/* طبيعة الأعمال */}
           <div className="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <label className="block text-slate-700 font-bold mb-2">طبيعة الأعمال المطلوبة</label>
-            <input type="text" required value={workType} onChange={(e) => setWorkType(e.target.value)} placeholder="مثال: تكييف مركزي، تشطيبات داخلية، وأعمال كهرباء..." className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none" />
+            <input type="text" required value={workType} onChange={(e) => setWorkType(e.target.value)} placeholder="مثال: تكييف مركزي، تشطيبات داخلية، وأعمال كهرباء..." className={inputStyles} />
           </div>
 
-          <div className="md:col-span-2 mt-4 mb-2"><hr /></div>
+          <div className="md:col-span-2 mt-4 mb-2"><hr className="border-slate-200" /></div>
 
           {/* بيانات الدخول (الإيميل) */}
           <div>
             <label className="block text-slate-700 font-bold mb-2">البريد الإلكتروني للعميل</label>
-            <input type="email" required value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="client@domain.com" className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none text-left" dir="ltr" />
+            <input type="email" required value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="client@domain.com" className={`${inputStyles} text-left`} dir="ltr" />
             <p className="text-xs text-blue-500 mt-2 font-bold">هذا هو الإيميل الذي سيستخدمه العميل للدخول</p>
           </div>
 
           {/* بيانات الدخول (الباسوورد) */}
           <div>
             <label className="block text-slate-700 font-bold mb-2">كلمة المرور (أرسلها للعميل)</label>
-            {/* خليت الـ type="text" عشان الموظف يشوف هو بيكتب إيه وياخدها كوبي */}
-            <input type="text" required value={clientPassword} onChange={(e) => setClientPassword(e.target.value)} placeholder="Afaq2026" className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none text-left font-bold text-slate-800" dir="ltr" />
+            <input type="text" required value={clientPassword} onChange={(e) => setClientPassword(e.target.value)} placeholder="Afaq2026" className={`${inputStyles} text-left text-[#e86024]`} dir="ltr" />
             <p className="text-xs text-orange-500 mt-2 font-bold">يجب أن تكون 6 أحرف أو أرقام على الأقل</p>
           </div>
         </div>
 
-        <button type="submit" disabled={loading} className="w-full bg-blue-950 hover:bg-blue-800 text-white font-bold py-5 rounded-xl shadow-lg transition-all mt-8 text-lg">
+        <button type="submit" disabled={loading} className="w-full bg-[#e86024] hover:bg-[#c04b19] text-white font-bold py-5 rounded-xl shadow-lg transition-all mt-8 text-lg">
           {loading ? 'جاري الحفظ...' : '🚀 إنشاء حساب العميل وتأسيس المشروع'}
         </button>
         
