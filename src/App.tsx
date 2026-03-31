@@ -24,52 +24,67 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   
   const [showPortal, setShowPortal] = useState(false);
-  
-  // متغير ذكي لمعرفة لغة الموقع الحالية
   const [isArabic, setIsArabic] = useState(true);
 
-  useEffect(() => {
-    // دالة لتحديث اللغة بناءً على الـ HTML tag
-    const updateLang = () => {
-      const currentDir = document.documentElement.dir;
-      const currentLang = document.documentElement.lang;
-      setIsArabic(currentDir === 'rtl' || currentLang.includes('ar'));
-    };
+  // التعديل الجوهري: فصلنا دالة جلب البيانات عشان نستخدمها بدون Refresh
+  const loadUserData = async () => {
+    setLoading(true);
+    const { data: { session } } = await supabase.auth.getSession();
+    setSession(session);
 
-    // التحقق فور فتح الموقع
-    updateLang();
-
-    // مراقبة أي تغيير في اللغة (عشان لما العميل يدوس على زرار تغيير اللغة)
-    const observer = new MutationObserver(updateLang);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['dir', 'lang'] });
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    async function checkUser() {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-
-      if (session) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-        setUserRole(profile?.role || 'client');
-      }
-      setLoading(false);
+    if (session) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+      setUserRole(profile?.role || 'client');
     }
-    checkUser();
-  }, []);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.reload(); 
+    setLoading(false);
   };
 
-  // الحالة الأولى: عرض الموقع الرئيسي (شيلنا الـ dir الثابت من هنا)
+  // تشغيل الدالة أول مرة الموقع يفتح
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  // مراقب لغة الموقع
+  useEffect(() => {
+    const detectLanguage = () => {
+      const computedDir = window.getComputedStyle(document.body).direction;
+      const htmlLang = document.documentElement.lang.toLowerCase();
+      const htmlDir = document.documentElement.dir.toLowerCase();
+      
+      if (computedDir === 'rtl' || htmlDir === 'rtl' || htmlLang.includes('ar')) {
+        setIsArabic(true);
+      } else {
+        setIsArabic(false);
+      }
+    };
+
+    detectLanguage();
+
+    const handleUserClick = () => setTimeout(detectLanguage, 100);
+    document.addEventListener('click', handleUserClick);
+
+    const observer = new MutationObserver(detectLanguage);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['lang', 'dir', 'class'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['lang', 'dir', 'class'] });
+
+    return () => {
+      document.removeEventListener('click', handleUserClick);
+      observer.disconnect();
+    };
+  }, []);
+
+  // دالة الخروج السلسة
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    setUserRole(null);
+    setShowPortal(false); // نرجعه للموقع الأساسي بعد ما يقفل
+  };
+
   if (!showPortal) {
     return (
       <div className="font-sans antialiased text-slate-200 bg-[#0a0f1c]">
@@ -88,11 +103,14 @@ export default function App() {
         
         <Footer />
 
-        {/* الزرار العائم الديناميكي (بيتغير لغته ومكانه) */}
         <button 
           onClick={() => setShowPortal(true)}
-          className={`fixed bottom-8 ${isArabic ? 'left-8' : 'right-8'} z-50 bg-[#e86024] hover:bg-[#c04b19] text-white px-6 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 transition-transform hover:scale-105 border-2 border-white/10`}
-          dir={isArabic ? 'rtl' : 'ltr'}
+          className="fixed bottom-8 z-50 bg-[#e86024] hover:bg-[#c04b19] text-white px-6 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 transition-transform hover:scale-105 border-2 border-white/10"
+          style={{
+            left: isArabic ? '2rem' : 'auto',
+            right: isArabic ? 'auto' : '2rem',
+            direction: isArabic ? 'rtl' : 'ltr'
+          }}
         >
           <span>🔐</span>
           <span>{isArabic ? 'بوابة العملاء' : 'Client Portal'}</span>
@@ -101,7 +119,6 @@ export default function App() {
     );
   }
 
-  // الحالة الثانية: البوابة الإلكترونية
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#0a0f1c] text-[#e86024] font-bold text-xl" dir="rtl">
@@ -117,9 +134,10 @@ export default function App() {
           onClick={() => setShowPortal(false)} 
           className="absolute top-6 right-6 z-50 text-slate-400 hover:text-white px-4 py-2 font-bold transition-all flex items-center gap-2"
         >
-          <span>⬅️</span> العودة للموقع
+          <span>⬅️</span> {isArabic ? 'العودة للموقع' : 'Back to Site'}
         </button>
-        <Login onLoginSuccess={() => window.location.reload()} />
+        {/* التعديل هنا: بننده على الدالة بدل ما نعمل Refresh للمتصفح */}
+        <Login onLoginSuccess={loadUserData} />
       </div>
     );
   }
