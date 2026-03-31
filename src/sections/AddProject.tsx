@@ -148,7 +148,7 @@ export default function AddProject() {
 
         <button 
           type="submit" disabled={uploading}
-          className={`w-full py-5 rounded-2xl font-black text-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${uploading ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-800 text-white'}`}
+          className={`w-full py-5 rounded-2xl font-black text-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${uploading ? 'bg-slate-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-800 text-white'}`}
         >
           {uploading ? 'جاري الحفظ...' : '🚀 حفظ وإرسال التقرير'}
         </button>
