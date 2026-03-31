@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-// تأكد أن ملف supabase.ts موجود في مجلد lib داخل src
-import { supabase } from './lib/supabase'; 
-import { Building2, Lock, Mail, AlertCircle } from 'lucide-react';
+// التعديل هنا: نقطتين عشان نخرج من فولدر sections ونروح لـ lib
+import { supabase } from '../lib/supabase'; 
+import { Building2, Lock, Mail, AlertCircle } from 'lucide-center'; // أو lucide-react حسب المكتبة عندك
 
 export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: string) => void }) {
   const [email, setEmail] = useState('');
@@ -18,13 +18,12 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
       if (authError) {
-        setErrorMsg('بيانات الدخول غير صحيحة، تأكد من الإيميل وكلمة المرور');
+        setErrorMsg('بيانات الدخول غير صحيحة');
         setLoading(false);
         return;
       }
 
-      // جلب الصلاحية من جدول الـ profiles
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', authData.user.id)
@@ -33,7 +32,7 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
       onLoginSuccess(profile?.role || 'client');
       
     } catch (err) {
-      setErrorMsg('حدث خطأ غير متوقع في النظام');
+      setErrorMsg('حدث خطأ في الاتصال بالسيرفر');
     } finally {
       setLoading(false);
     }
@@ -48,11 +47,11 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
             <Building2 className="text-[#0a101e]" size={40} />
           </div>
           <h2 className="text-3xl font-black text-[#0a101e]">بوابة <span className="text-[#e86024]">آفاق</span></h2>
-          <p className="text-slate-500 mt-2 font-bold uppercase tracking-widest text-xs">AFAQ AL-TATWEER PORTAL</p>
+          <p className="text-slate-500 mt-2 font-bold text-xs">سجل دخولك لمتابعة المشروع</p>
         </div>
 
         {errorMsg && (
-          <div className="mb-6 p-4 bg-red-50 border-r-4 border-red-500 text-red-700 flex items-center gap-3 animate-shake">
+          <div className="mb-6 p-4 bg-red-50 border-r-4 border-red-500 text-red-700 flex items-center gap-3">
             <AlertCircle size={20} />
             <span className="text-sm font-bold">{errorMsg}</span>
           </div>
@@ -61,32 +60,26 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block text-sm font-black text-slate-700 mb-2 mr-1">البريد الإلكتروني</label>
-            <div className="relative">
-              <Mail className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-              <input 
-                type="email" 
-                placeholder="email@domain.com" 
-                value={email} 
-                onChange={e => setEmail(e.target.value)}
-                className="w-full border-2 border-slate-100 p-4 pr-12 rounded-2xl outline-none focus:border-[#e86024] transition-all bg-slate-50 text-slate-900 font-bold placeholder-slate-300" 
-                required 
-              />
-            </div>
+            <input 
+              type="email" 
+              placeholder="example@afaq.com" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)}
+              className="w-full border-2 border-slate-100 p-4 rounded-2xl outline-none focus:border-[#e86024] bg-slate-50 text-slate-900 font-bold" 
+              required 
+            />
           </div>
 
           <div>
             <label className="block text-sm font-black text-slate-700 mb-2 mr-1">كلمة المرور</label>
-            <div className="relative">
-              <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                value={password} 
-                onChange={e => setPassword(e.target.value)}
-                className="w-full border-2 border-slate-100 p-4 pr-12 rounded-2xl outline-none focus:border-[#e86024] transition-all bg-slate-50 text-slate-900 font-bold placeholder-slate-300" 
-                required 
-              />
-            </div>
+            <input 
+              type="password" 
+              placeholder="••••••••" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)}
+              className="w-full border-2 border-slate-100 p-4 rounded-2xl outline-none focus:border-[#e86024] bg-slate-50 text-slate-900 font-bold" 
+              required 
+            />
           </div>
 
           <button 
@@ -94,13 +87,9 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
             disabled={loading} 
             className="w-full bg-[#0a101e] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#e86024] transition-all shadow-xl active:scale-95 disabled:bg-slate-400"
           >
-            {loading ? 'جاري التحقق من الهوية...' : 'دخول النظام 🚀'}
+            {loading ? 'جاري الدخول...' : 'دخول النظام 🚀'}
           </button>
         </form>
-
-        <div className="mt-10 text-center border-t border-slate-100 pt-6 text-slate-400 font-bold text-[10px]">
-          تطوير وإشراف هندسي: شركة آفاق للتطوير © 2026
-        </div>
       </div>
     </div>
   );
