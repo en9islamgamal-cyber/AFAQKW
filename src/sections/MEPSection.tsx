@@ -21,7 +21,6 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // تعديل scrub لـ 1 عشان الحركة تبقى سلسة ومفيهاش تقطيع
       const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 1 } });
 
       scrollTl.fromTo(headlineRef.current, { x: isAr ? '50vw' : '-50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0);
@@ -29,10 +28,8 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
       scrollTl.fromTo(microLabelRef.current, { y: '10vh', opacity: 0 }, { y: 0, opacity: 1, ease: 'none' }, 0.1);
       scrollTl.fromTo(bgRef.current, { scale: 1.08, y: '8vh' }, { scale: 1, y: 0, ease: 'none' }, 0);
 
-      scrollTl.fromTo(headlineRef.current, { x: 0, opacity: 1 }, { x: isAr ? '18vw' : '-18vw', opacity: 0, ease: 'power2.in' }, 0.7);
-      scrollTl.fromTo(cardRef.current, { x: 0, opacity: 1 }, { x: isAr ? '-18vw' : '18vw', opacity: 0, ease: 'power2.in' }, 0.7);
-      scrollTl.fromTo(microLabelRef.current, { y: 0, opacity: 1 }, { y: '10vh', opacity: 0, ease: 'power2.in' }, 0.7);
-      scrollTl.fromTo(bgRef.current, { scale: 1, y: 0 }, { scale: 1.06, y: '-6vh', ease: 'power2.in' }, 0.7);
+      scrollTl.fromTo([headlineRef.current, cardRef.current], { opacity: 1 }, { opacity: 0, ease: 'power2.in' }, 0.7);
+      scrollTl.fromTo(bgRef.current, { scale: 1 }, { scale: 1.1, ease: 'power2.in' }, 0.7);
     }, section);
     return () => ctx.revert();
   }, [isAr]);
@@ -46,4 +43,41 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
     { icon: Settings, text: 'Load calculations & energy modeling' },
     { icon: Droplets, text: 'Chilled water, DX, and VRF systems' },
     { icon: Flame, text: 'Wet & dry fire suppression networks' },
-    { icon: Zap, text: 'Low
+    { icon: Zap, text: 'Low-voltage, ELV, and power distribution' },
+  ];
+
+  return (
+    <section ref={sectionRef} className={`section-pinned relative overflow-hidden ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform" style={{ backgroundImage: 'url(/hvac_mechanical_room.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div className="absolute inset-0 hero-gradient pointer-events-none" />
+
+      <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
+        <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
+          <h2 className="font-heading text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+            {isAr ? 'أنظمة كهروميكانيكية' : 'MEP that performs'}<br />
+            <span className="text-[#e86024]">{isAr ? 'تعمل بأقصى كفاءة.' : 'under load.'}</span>
+          </h2>
+          <p className="text-lg text-slate-300 max-w-[34vw] leading-relaxed font-bold">
+            {isAr ? 'تكييف، سباكة، مكافحة حريق، وكهرباء — مصممة لسهولة الصيانة.' : 'HVAC, plumbing, firefighting, and electrical—designed for maintainability.'}
+          </p>
+        </div>
+
+        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+          <h3 className="text-xl font-black text-white mb-6">
+            {isAr ? 'الأنظمة الكهروميكانيكية (MEP)' : 'MEP Systems'}
+          </h3>
+          <ul className="space-y-4">
+            {mepServices.map((service, index) => (
+              <li key={index} className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#e86024]/20 flex items-center justify-center flex-shrink-0 mt-1"><service.icon className="w-5 h-5 text-[#e86024]" /></div>
+                <span className="text-sm text-slate-200 font-bold leading-relaxed">{service.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default MEPSection;
