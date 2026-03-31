@@ -15,7 +15,7 @@ function App() {
       setSession(session);
 
       if (session) {
-        // جلب البيانات مع طباعة النتيجة للتأكد
+        // جلب الدور (Role) من قاعدة البيانات بدون إظهار رسائل تنبيه
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
@@ -23,11 +23,9 @@ function App() {
           .single();
         
         if (error) {
-          alert("خطأ في قراءة البيانات: " + error.message);
+          console.error("Error fetching role:", error.message);
           setUserRole('client');
         } else {
-          // السطر اللي جاي ده هيعرفنا المشكلة فين فوراً
-          alert("أهلاً بك! الموقع تعرف عليك بصلاحية: " + (profile?.role || "لا يوجد"));
           setUserRole(profile?.role || 'client');
         }
       }
@@ -41,22 +39,26 @@ function App() {
     window.location.reload(); 
   };
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-blue-900 text-white">جاري التحقق...</div>;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-blue-900 text-white font-sans" dir="rtl">
+        جاري التحقق من الصلاحيات...
+      </div>
+    );
+  }
 
   if (!session) {
     return <Login onLoginSuccess={() => window.location.reload()} />;
   }
 
   return (
-    <>
+    <div dir="rtl" className="min-h-screen bg-gray-50">
       {userRole === 'admin' ? (
         <AdminDashboard /> 
       ) : (
-        <div className="border-t-4 border-red-500">
-          <ClientDashboard onLogout={handleLogout} />
-        </div>
+        <ClientDashboard onLogout={handleLogout} />
       )}
-    </>
+    </div>
   );
 }
 
