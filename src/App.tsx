@@ -11,20 +11,24 @@ function App() {
 
   useEffect(() => {
     async function getSessionAndRole() {
-      // 1. التأكد من جلسة الدخول
+      // 1. جلب الجلسة الحالية
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
 
       if (session) {
-        // 2. سحب الرول (admin أو client) مباشرة من جدول profiles
-        const { data: profile } = await supabase
+        // 2. جلب الرول مباشرة وبدون كاش
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle(); // استخدام maybeSingle لتجنب الأخطاء لو البروفايل لسه مسمعش
         
-        console.log("الرول المكتشف:", profile?.role);
-        setUserRole(profile?.role || 'client');
+        if (profile) {
+          console.log("تم اكتشاف الرول:", profile.role);
+          setUserRole(profile.role);
+        } else {
+          setUserRole('client');
+        }
       }
       setLoading(false);
     }
@@ -37,15 +41,18 @@ function App() {
   };
 
   if (loading) {
-    return <div className="h-screen flex items-center justify-center font-sans">جاري التحقق من الصلاحيات...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-blue-900 text-white font-sans font-bold">
+        جاري فحص الصلاحيات...
+      </div>
+    );
   }
 
-  // لو مش مسجل دخول -> صفحة اللوجن
   if (!session) {
     return <Login onLoginSuccess={() => window.location.reload()} />;
   }
 
-  // لو مسجل دخول -> التحويل حسب الرول
+  // التحويل بناءً على الرول
   return (
     <>
       {userRole === 'admin' ? (
