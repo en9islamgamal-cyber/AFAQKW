@@ -7,9 +7,10 @@ export default function ManageProjects() {
   
   // حالات التحديث
   const [rate, setRate] = useState(0);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('قيد التنفيذ');
   const [workers, setWorkers] = useState(0);
   const [techs, setTechs] = useState(0);
+  const [updateDate, setUpdateDate] = useState(new Date().toISOString().split('T')[0]); // رجعنا تاريخ التحديث
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -31,6 +32,7 @@ export default function ManageProjects() {
     setStatus(proj.status || 'قيد التنفيذ');
     setWorkers(proj.workers_count || 0);
     setTechs(proj.techs_count || 0);
+    setUpdateDate(proj.last_updated || new Date().toISOString().split('T')[0]);
     setImageFile(null);
     setMessage('');
   };
@@ -61,8 +63,8 @@ export default function ManageProjects() {
           status: status,
           workers_count: status === 'قيد التنفيذ' ? workers : 0,
           techs_count: status === 'قيد التنفيذ' ? techs : 0,
-          image_url: publicImageUrl,
-          last_updated: new Date().toISOString().split('T')[0]
+          last_updated: updateDate, // إضافة تاريخ التحديث
+          image_url: publicImageUrl
         })
         .eq('id', selectedProject.id);
 
@@ -78,12 +80,17 @@ export default function ManageProjects() {
     }
   };
 
+  // الكلاس الموحد عشان الخط يبقى غامق وواضح (حل مشكلة الخط الأبيض)
+  const inputStyles = "w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none text-slate-900 bg-white font-bold placeholder-slate-400";
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8" dir="rtl">
       
       {/* قائمة المشاريع لاختيار واحد منها */}
       <div className="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit max-h-[80vh] overflow-y-auto">
-        <h3 className="font-black text-xl text-blue-950 mb-4">المشاريع الجارية</h3>
+        <h3 className="font-black text-xl text-blue-950 mb-4 flex items-center gap-2">
+           <span>📂</span> المشاريع الجارية
+        </h3>
         <div className="space-y-3">
           {projects.map(proj => (
             <button 
@@ -102,7 +109,7 @@ export default function ManageProjects() {
         </div>
       </div>
 
-      {/* شاشة التحديث (تظهر فقط عند اختيار مشروع) */}
+      {/* شاشة التحديث */}
       <div className="lg:col-span-2">
         {!selectedProject ? (
           <div className="bg-slate-50 h-full rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center p-10 text-slate-400 font-bold text-xl">
@@ -111,50 +118,58 @@ export default function ManageProjects() {
         ) : (
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 animate-in fade-in duration-300">
             <h2 className="text-2xl font-black text-[#e86024] mb-6 border-b pb-4">
-              تحديث بيانات: {selectedProject.client_name}
+              تحديث بيانات: {selectedProject.client_name || selectedProject.project_name}
             </h2>
 
             <form onSubmit={handleUpdate} className="space-y-8">
-              {/* السلايدر */}
-              <div className="bg-slate-50 p-6 rounded-2xl border-2 border-blue-50">
+              
+              {/* السلايدر - تم إصلاح الاتجاه */}
+              <div className="bg-slate-50 p-6 rounded-2xl border-2 border-slate-200">
                 <div className="flex justify-between items-center mb-6">
-                  <label className="text-blue-900 font-black text-lg">نسبة الإنجاز الفعلية</label>
+                  <label className="text-blue-950 font-black text-lg">نسبة الإنجاز الفعلية</label>
                   <span className="bg-[#e86024] text-white px-5 py-2 rounded-full font-black text-xl">{rate}%</span>
                 </div>
-                <div className="relative pt-1 px-2">
-                  <input type="range" min="0" max="100" value={rate} onChange={(e) => setRate(parseInt(e.target.value))} style={{ direction: 'rtl' }} className="w-full h-4 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#e86024]" />
-                  <div className="flex justify-between text-sm text-slate-500 mt-4 font-bold px-1" dir="ltr">
+                {/* تم إجبار السلايدر على LTR عشان السحب يمشي مع الأرقام بدقة */}
+                <div className="relative pt-1 px-2" dir="ltr">
+                  <input type="range" min="0" max="100" value={rate} onChange={(e) => setRate(parseInt(e.target.value))} className="w-full h-4 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-[#e86024]" />
+                  <div className="flex justify-between text-sm text-slate-500 mt-4 font-bold px-1">
                     <span>0%</span><span>50%</span><span>100%</span>
                   </div>
                 </div>
               </div>
 
-              {/* العمالة والحالة */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className={status === 'قيد التنفيذ' ? 'md:col-span-1' : 'md:col-span-3'}>
+              {/* الحالة وتاريخ التحديث */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
                   <label className="block text-slate-700 font-bold mb-2">حالة المشروع</label>
-                  <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none">
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputStyles}>
                     <option value="قيد التنفيذ">قيد التنفيذ</option>
                     <option value="مرحلة التصميم">مرحلة التصميم</option>
                     <option value="تم التسليم">تم التسليم</option>
                   </select>
                 </div>
-                {status === 'قيد التنفيذ' && (
-                  <>
-                    <div>
-                      <label className="block text-slate-700 font-bold mb-2">عدد العمال 👷</label>
-                      <input type="number" value={workers} onChange={(e) => setWorkers(parseInt(e.target.value))} className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none" />
-                    </div>
-                    <div>
-                      <label className="block text-slate-700 font-bold mb-2">عدد الفنيين 👨‍🔧</label>
-                      <input type="number" value={techs} onChange={(e) => setTechs(parseInt(e.target.value))} className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none" />
-                    </div>
-                  </>
-                )}
+                <div>
+                  <label className="block text-slate-700 font-bold mb-2">تاريخ التحديث</label>
+                  <input type="date" value={updateDate} onChange={(e) => setUpdateDate(e.target.value)} className={inputStyles} />
+                </div>
               </div>
 
+              {/* العمالة (تظهر فقط لو قيد التنفيذ) */}
+              {status === 'قيد التنفيذ' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-orange-50 p-5 rounded-xl border border-orange-100">
+                  <div>
+                    <label className="block text-orange-900 font-bold mb-2">عدد العمال 👷</label>
+                    <input type="number" min="0" value={workers} onChange={(e) => setWorkers(parseInt(e.target.value))} className={inputStyles} />
+                  </div>
+                  <div>
+                    <label className="block text-blue-900 font-bold mb-2">عدد الفنيين 👨‍🔧</label>
+                    <input type="number" min="0" value={techs} onChange={(e) => setTechs(parseInt(e.target.value))} className={inputStyles} />
+                  </div>
+                </div>
+              )}
+
               {/* الصور */}
-              <div className="p-6 rounded-2xl border-4 border-dashed border-slate-200 text-center hover:border-blue-300 transition-all">
+              <div className="p-6 rounded-2xl border-4 border-dashed border-slate-200 text-center hover:border-blue-300 transition-all bg-slate-50">
                 <label className="block text-slate-700 font-black mb-4">تحديث صورة الموقع 📸</label>
                 <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)} className="hidden" id="file-upload" />
                 <label htmlFor="file-upload" className="cursor-pointer bg-blue-950 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-800 transition-all inline-block">
@@ -162,11 +177,15 @@ export default function ManageProjects() {
                 </label>
               </div>
 
-              <button type="submit" disabled={loading} className={`w-full py-4 rounded-xl font-black text-xl transition-all ${loading ? 'bg-slate-400' : 'bg-[#e86024] hover:bg-[#c04b19] text-white'}`}>
+              <button type="submit" disabled={loading} className={`w-full py-5 rounded-xl font-black text-xl transition-all shadow-lg ${loading ? 'bg-slate-400' : 'bg-[#e86024] hover:bg-[#c04b19] text-white'}`}>
                 {loading ? 'جاري الحفظ...' : '💾 حفظ التحديثات وإشعار العميل'}
               </button>
               
-              {message && <div className="p-4 mt-4 text-center font-bold bg-green-50 text-green-700 rounded-xl">{message}</div>}
+              {message && (
+                 <div className={`p-4 mt-4 text-center font-bold rounded-xl border-2 ${message.includes('✅') ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+                    {message}
+                 </div>
+              )}
             </form>
           </div>
         )}
