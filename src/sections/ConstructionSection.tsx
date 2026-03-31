@@ -21,7 +21,8 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 0.6 } });
+      // تعديل scrub لـ 1 لحركة سلسة
+      const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 1 } });
 
       scrollTl.fromTo(headlineRef.current, { x: isAr ? '50vw' : '-50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0);
       scrollTl.fromTo(cardRef.current, { x: isAr ? '-50vw' : '50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0.05);
@@ -50,11 +51,15 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
 
   return (
     <section ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/facade_construction.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 hero-gradient" />
+      {/* 1. إضافة transform-gpu للخلفية */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform" style={{ backgroundImage: 'url(/facade_construction.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      
+      {/* 2. إلغاء تفاعل الماوس مع الظل لتخفيف الضغط */}
+      <div className="absolute inset-0 hero-gradient pointer-events-none" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
-        <div ref={headlineRef} className={`max-w-[44vw] ${isAr ? 'text-right' : 'text-left'}`}>
+        {/* 3. تفعيل تسريع كارت الشاشة على العنوان */}
+        <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
           <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
             {isAr ? 'من الهيكل الخرساني' : 'Structure to'}<br />
             <span className="text-primary">{isAr ? 'إلى التشطيبات.' : 'finishes.'}</span>
@@ -64,7 +69,8 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
           </p>
         </div>
 
-        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+        {/* 4. تفعيل تسريع كارت الشاشة على الكارت */}
+        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
           <h3 className={`font-heading text-lg text-white mb-6 ${isAr ? 'font-bold' : 'font-semibold'}`}>
             {isAr ? 'المقاولات العامة' : 'General Construction'}
           </h3>
@@ -82,7 +88,8 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
           </button>
         </div>
 
-        <div ref={microLabelRef} className={`absolute bottom-[10vh] ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
+        {/* 5. تفعيل تسريع كارت الشاشة على النص الصغير */}
+        <div ref={microLabelRef} className={`absolute bottom-[10vh] transform-gpu will-change-transform ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
           <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
             {isAr ? 'تقارير يومية • قوائم فحص الجودة (Quality Checklists)' : 'Daily Reporting • Quality Checklists'}
           </span>
