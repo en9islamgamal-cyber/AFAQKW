@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { supabase } from './lib/supabase';
+// استدعاء الملفات - تأكد أن الأسماء في GitHub مطابقة تماماً لهذه الأسماء
 import Login from './sections/Login';
 import ClientDashboard from './sections/ClientDashboard';
 import AdminDashboard from './sections/AdminDashboard';
-import { supabase } from './lib/supabase';
 
 function App() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
-  const [isChecking, setIsChecking] = useState(true); // حالة التحقق
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     async function getSessionAndRole() {
@@ -21,7 +22,6 @@ function App() {
           .eq('id', session.user.id)
           .single();
         
-        console.log("الرول الحالي في الداتا بيز هو:", profile?.role);
         setUserRole(profile?.role || 'client');
       }
       setIsChecking(false);
@@ -36,10 +36,8 @@ function App() {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
-        <div className="text-xl font-bold text-blue-900 animate-pulse text-center">
-          جاري التحقق من الصلاحيات... <br/> آفاق للتطوير
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans text-blue-900 font-bold">
+        جاري التحميل... آفاق للتطوير
       </div>
     );
   }
