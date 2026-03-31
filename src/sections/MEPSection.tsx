@@ -21,7 +21,8 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 0.6 } });
+      // تعديل scrub لـ 1 عشان الحركة تبقى سلسة ومفيهاش تقطيع
+      const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 1 } });
 
       scrollTl.fromTo(headlineRef.current, { x: isAr ? '50vw' : '-50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0);
       scrollTl.fromTo(cardRef.current, { x: isAr ? '-50vw' : '50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0.05);
@@ -45,51 +46,4 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
     { icon: Settings, text: 'Load calculations & energy modeling' },
     { icon: Droplets, text: 'Chilled water, DX, and VRF systems' },
     { icon: Flame, text: 'Wet & dry fire suppression networks' },
-    { icon: Zap, text: 'Low-voltage, ELV, and power distribution' },
-  ];
-
-  return (
-    <section ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/hvac_mechanical_room.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 hero-gradient" />
-
-      <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
-        <div ref={headlineRef} className={`max-w-[44vw] ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
-            {isAr ? 'أنظمة كهروميكانيكية' : 'MEP that performs'}<br />
-            <span className="text-primary">{isAr ? 'تعمل بأقصى كفاءة.' : 'under load.'}</span>
-          </h2>
-          <p className={`text-body text-gray-cool max-w-[34vw] leading-relaxed ${isAr ? 'text-lg' : ''}`}>
-            {isAr ? 'تكييف، سباكة، مكافحة حريق، وكهرباء — مصممة لسهولة الصيانة ومختبرة بالكامل قبل التسليم.' : 'HVAC, plumbing, firefighting, and electrical—designed for maintainability and tested before handover.'}
-          </p>
-        </div>
-
-        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <h3 className={`font-heading text-lg text-white mb-6 ${isAr ? 'font-bold' : 'font-semibold'}`}>
-            {isAr ? 'الأنظمة الكهروميكانيكية (MEP)' : 'MEP Systems'}
-          </h3>
-          <ul className="space-y-4">
-            {mepServices.map((service, index) => (
-              <li key={index} className={`flex items-start gap-3 ${isAr ? 'justify-start' : ''}`}>
-                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5"><service.icon className="w-4 h-4 text-primary" /></div>
-                <span className="text-sm text-gray-cool leading-relaxed">{service.text}</span>
-              </li>
-            ))}
-          </ul>
-          <button className={`mt-6 inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
-            {isAr ? 'اطلع على معاييرنا الهندسية' : 'See MEP standards'}
-            {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-          </button>
-        </div>
-
-        <div ref={microLabelRef} className={`absolute bottom-[10vh] ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
-          <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
-            {isAr ? 'اختبارات التشغيل (Commissioning) • مخططات ما بعد التنفيذ (As-Built)' : 'Tested Commissioning • As-Built Documentation'}
-          </span>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default MEPSection;
+    { icon: Zap, text: 'Low
