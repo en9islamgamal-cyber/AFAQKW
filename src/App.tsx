@@ -10,29 +10,30 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function getSessionAndRole() {
-      // 1. جلب الجلسة الحالية
+    async function checkUser() {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
 
       if (session) {
-        // 2. جلب الرول مباشرة وبدون كاش
+        // جلب البيانات مع طباعة النتيجة للتأكد
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .maybeSingle(); // استخدام maybeSingle لتجنب الأخطاء لو البروفايل لسه مسمعش
+          .single();
         
-        if (profile) {
-          console.log("تم اكتشاف الرول:", profile.role);
-          setUserRole(profile.role);
-        } else {
+        if (error) {
+          alert("خطأ في قراءة البيانات: " + error.message);
           setUserRole('client');
+        } else {
+          // السطر اللي جاي ده هيعرفنا المشكلة فين فوراً
+          alert("أهلاً بك! الموقع تعرف عليك بصلاحية: " + (profile?.role || "لا يوجد"));
+          setUserRole(profile?.role || 'client');
         }
       }
       setLoading(false);
     }
-    getSessionAndRole();
+    checkUser();
   }, []);
 
   const handleLogout = async () => {
@@ -40,25 +41,20 @@ function App() {
     window.location.reload(); 
   };
 
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-blue-900 text-white font-sans font-bold">
-        جاري فحص الصلاحيات...
-      </div>
-    );
-  }
+  if (loading) return <div className="h-screen flex items-center justify-center bg-blue-900 text-white">جاري التحقق...</div>;
 
   if (!session) {
     return <Login onLoginSuccess={() => window.location.reload()} />;
   }
 
-  // التحويل بناءً على الرول
   return (
     <>
       {userRole === 'admin' ? (
         <AdminDashboard /> 
       ) : (
-        <ClientDashboard onLogout={handleLogout} />
+        <div className="border-t-4 border-red-500">
+          <ClientDashboard onLogout={handleLogout} />
+        </div>
       )}
     </>
   );
