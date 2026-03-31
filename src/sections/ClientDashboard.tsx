@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Building2, MapPin, Calendar, Users, Wrench, CheckCircle, LogOut, Camera } from 'lucide-react';
+import { Building2, MapPin, Calendar, Users, Wrench, CheckCircle, LogOut, Camera, X, ArrowRight } from 'lucide-react';
 
 export default function ClientDashboard({ onLogout }: { onLogout: () => void }) {
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showDetails, setShowDetails] = useState(false); // حالة إظهار التفاصيل
 
   useEffect(() => {
     async function fetchClientProject() {
@@ -37,7 +38,6 @@ export default function ClientDashboard({ onLogout }: { onLogout: () => void }) 
         <div className="bg-white p-10 rounded-3xl shadow-xl text-center max-w-md border border-slate-100">
           <div className="text-6xl mb-6">🔍</div>
           <h2 className="text-2xl font-black text-slate-800 mb-4">عذراً، لا يوجد مشروع مرتبط</h2>
-          <p className="text-slate-500 mb-8 font-bold">يرجى التواصل مع الإدارة لتفعيل حسابك.</p>
           <button onClick={onLogout} className="w-full bg-[#e86024] text-white py-4 rounded-xl font-bold hover:bg-orange-700 transition-all">
             تسجيل الخروج
           </button>
@@ -48,102 +48,139 @@ export default function ClientDashboard({ onLogout }: { onLogout: () => void }) 
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans pb-12" dir="rtl">
-      {/* الهيدر العلوي */}
+      {/* الهيدر */}
       <header className="bg-[#0a0f1c] text-white p-5 shadow-2xl border-b-4 border-[#e86024]">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
              <div className="bg-[#e86024] p-2 rounded-lg"><Building2 size={24} /></div>
-             <div>
-                <h1 className="text-xl font-black">آفاق <span className="text-[#e86024]">للتطوير</span></h1>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Client Portal</p>
-             </div>
+             <h1 className="text-xl font-black">بوابة <span className="text-[#e86024]">آفاق</span></h1>
           </div>
-          <button onClick={onLogout} className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 px-4 py-2 rounded-xl font-bold transition-all border border-red-500/20 text-sm">
-            تسجيل خروج <LogOut size={18} />
+          <button onClick={onLogout} className="text-red-400 hover:text-white px-4 py-2 rounded-xl font-bold transition-all text-sm flex items-center gap-2">
+            خروج <LogOut size={18} />
           </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 mt-8">
-        {/* كارت المشروع الرئيسي */}
-        <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col lg:flex-row">
-          
-          {/* قسم الصورة (علي اليمين في العربي) */}
-          <div className="lg:w-1/2 h-80 lg:h-auto bg-slate-200 relative">
+      <main className="max-w-4xl mx-auto px-4 mt-12">
+        {/* كارت المشروع القابل للضغط */}
+        <div 
+          onClick={() => setShowDetails(true)}
+          className="bg-white rounded-[2.5rem] shadow-xl border border-slate-200 overflow-hidden cursor-pointer transform transition-transform hover:scale-[1.02] active:scale-95"
+        >
+          <div className="h-64 bg-slate-200 relative">
             {project.image_url ? (
-              <img src={project.image_url} alt="Site Progress" className="w-full h-full object-cover" />
+              <img src={project.image_url} alt="Site" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 p-10 text-center">
-                <Camera size={64} className="mb-4 opacity-20" />
-                <p className="font-bold text-lg italic">سيتم تحديث صور الموقع قريباً</p>
-              </div>
+              <div className="w-full h-full flex flex-col items-center justify-center text-slate-400"><Camera size={48} /></div>
             )}
-            <div className="absolute top-6 right-6 bg-white/95 backdrop-blur px-5 py-2.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
-               <span className={`w-3 h-3 rounded-full ${project.status === 'تم التسليم' ? 'bg-green-500' : 'bg-[#e86024] animate-pulse'}`}></span>
-               <span className="font-black text-slate-900 text-sm">{project.status}</span>
+            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl shadow-lg font-black text-slate-900 text-sm">
+               {project.status}
             </div>
           </div>
 
-          {/* قسم البيانات */}
-          <div className="lg:w-1/2 p-8 lg:p-12">
-            <div className="mb-8">
-              <span className="text-[#e86024] font-black text-sm mb-2 block uppercase tracking-widest">تفاصيل المشروع الحالي</span>
-              <h2 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
-                {project.project_name}
-              </h2>
+          <div className="p-8">
+            <h2 className="text-3xl font-black text-slate-900 mb-4">{project.project_name}</h2>
+            <div className="flex items-center gap-2 text-slate-500 font-bold mb-6">
+              <MapPin size={18} className="text-[#e86024]" /> {project.location}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-               <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="bg-blue-100 p-3 rounded-xl text-blue-600"><MapPin size={22} /></div>
-                  <div><p className="text-[11px] font-bold text-slate-400">الموقع</p><p className="font-black text-slate-800">{project.location}</p></div>
-               </div>
-               <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="bg-orange-100 p-3 rounded-xl text-orange-600"><Calendar size={22} /></div>
-                  <div><p className="text-[11px] font-bold text-slate-400">آخر تحديث</p><p className="font-black text-slate-800" dir="ltr">{project.last_updated || '---'}</p></div>
-               </div>
+            <div className="flex justify-between items-end mb-2">
+               <span className="text-slate-400 font-bold text-sm">نسبة الإنجاز</span>
+               <span className="text-2xl font-black text-[#e86024]">{project.completion_rate}%</span>
+            </div>
+            <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+               <div className="bg-[#e86024] h-full rounded-full transition-all duration-1000" style={{ width: `${project.completion_rate}%` }}></div>
             </div>
 
-            {/* شريط الإنجاز */}
-            <div className="mb-10 bg-slate-900 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden">
-               <div className="relative z-10 flex justify-between items-end mb-4">
-                  <span className="text-white/70 font-bold text-sm">معدل الإنجاز الفعلي</span>
-                  <span className="text-5xl font-black text-[#e86024]">{project.completion_rate}%</span>
-               </div>
-               <div className="relative z-10 w-full bg-white/10 h-4 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-l from-[#e86024] to-orange-400 h-full rounded-full transition-all duration-1000 ease-out" 
-                    style={{ width: `${project.completion_rate}%` }}
-                  ></div>
-               </div>
-               {/* شعار الشركة خلفية خفيفة */}
-               <Building2 className="absolute -left-10 -bottom-10 text-white/5 w-48 h-48" />
+            <div className="mt-8 flex justify-center">
+               <span className="bg-slate-900 text-white px-8 py-3 rounded-full font-bold flex items-center gap-2">
+                  اضغط لعرض كامل التفاصيل <ArrowRight size={18} className="rotate-180" />
+               </span>
             </div>
-
-            {/* إحصائيات الميدان */}
-            <div className="grid grid-cols-2 gap-6">
-               <div className="text-center p-6 bg-white border-2 border-slate-100 rounded-3xl">
-                  <Users className="mx-auto mb-3 text-slate-300" size={32} />
-                  <p className="text-3xl font-black text-slate-900">{project.workers_count || 0}</p>
-                  <p className="text-xs font-bold text-slate-500 uppercase mt-1">عمال الموقع</p>
-               </div>
-               <div className="text-center p-6 bg-white border-2 border-slate-100 rounded-3xl">
-                  <Wrench className="mx-auto mb-3 text-slate-300" size={32} />
-                  <p className="text-3xl font-black text-slate-900">{project.techs_count || 0}</p>
-                  <p className="text-xs font-bold text-slate-500 uppercase mt-1">طاقم الفنيين</p>
-               </div>
-            </div>
-
-            {/* رسالة النجاح في حالة التسليم */}
-            {project.status === 'تم التسليم' && (
-              <div className="mt-8 bg-green-50 p-6 rounded-2xl border border-green-200 flex items-center gap-4 text-green-800">
-                <CheckCircle size={32} className="text-green-500" />
-                <p className="font-bold">تهانينا! تم اكتمال كافة بنود المشروع وتسليمه نهائياً.</p>
-              </div>
-            )}
           </div>
         </div>
       </main>
+
+      {/* --- النافذة المنبثقة (Project Details Modal) --- */}
+      {showDetails && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-10">
+          {/* الخلفية المظلمة */}
+          <div className="absolute inset-0 bg-[#0a0f1c]/90 backdrop-blur-sm" onClick={() => setShowDetails(false)}></div>
+          
+          {/* محتوى النافذة */}
+          <div className="relative bg-white w-full max-w-5xl max-h-full overflow-y-auto rounded-[3rem] shadow-2xl animate-in zoom-in duration-300">
+            
+            {/* زر الإغلاق */}
+            <button 
+              onClick={() => setShowDetails(false)}
+              className="absolute top-6 left-6 z-10 bg-slate-100 hover:bg-red-500 hover:text-white p-3 rounded-full transition-all text-slate-500"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+               {/* الصورة المكبرة */}
+               <div className="h-80 lg:h-auto bg-slate-200">
+                  {project.image_url ? (
+                    <img src={project.image_url} alt="Detailed Site" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-300 font-bold">لا توجد صورة حالياً</div>
+                  )}
+               </div>
+
+               {/* تفاصيل المشروع بالكامل */}
+               <div className="p-8 lg:p-16">
+                  <div className="mb-10">
+                    <h3 className="text-4xl font-black text-slate-900 mb-2 leading-tight">{project.project_name}</h3>
+                    <p className="text-[#e86024] font-black text-xl">{project.work_type}</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-6 mb-10">
+                    <div className="flex items-center gap-5 bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                      <div className="bg-blue-100 p-4 rounded-2xl text-blue-600"><MapPin size={28} /></div>
+                      <div><p className="text-xs font-bold text-slate-400">موقع المشروع</p><p className="font-black text-slate-800 text-lg">{project.location}</p></div>
+                    </div>
+                    <div className="flex items-center gap-5 bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                      <div className="bg-orange-100 p-4 rounded-2xl text-orange-600"><Calendar size={28} /></div>
+                      <div><p className="text-xs font-bold text-slate-400">تاريخ آخر تحديث ميداني</p><p className="font-black text-slate-800 text-lg" dir="ltr">{project.last_updated || '---'}</p></div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900 p-8 rounded-[2rem] text-white mb-10">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="font-bold opacity-60">حالة الإنجاز الكلية</span>
+                      <span className="text-4xl font-black text-[#e86024]">{project.completion_rate}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 h-3 rounded-full overflow-hidden">
+                       <div className="bg-[#e86024] h-full" style={{ width: `${project.completion_rate}%` }}></div>
+                    </div>
+                  </div>
+
+                  {/* إحصائيات الميدان */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-6 bg-white border-2 border-slate-100 rounded-3xl text-center">
+                      <Users size={32} className="mx-auto text-slate-300 mb-2" />
+                      <p className="text-3xl font-black text-slate-900">{project.workers_count || 0}</p>
+                      <p className="text-xs font-bold text-slate-400">عامل متواجد</p>
+                    </div>
+                    <div className="p-6 bg-white border-2 border-slate-100 rounded-3xl text-center">
+                      <Wrench size={32} className="mx-auto text-slate-300 mb-2" />
+                      <p className="text-3xl font-black text-slate-900">{project.techs_count || 0}</p>
+                      <p className="text-xs font-bold text-slate-400">فني متخصص</p>
+                    </div>
+                  </div>
+
+                  {project.status === 'تم التسليم' && (
+                    <div className="mt-8 bg-green-50 p-6 rounded-3xl border border-green-200 text-green-700 flex items-center gap-4">
+                      <CheckCircle size={30} />
+                      <p className="font-bold">تم تسليم المشروع نهائياً وفق أعلى المعايير الهندسية.</p>
+                    </div>
+                  )}
+               </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
