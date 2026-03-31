@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-// التعديل هنا: نقطتين عشان نخرج من فولدر sections ونروح لـ lib
-import { supabase } from '../lib/supabase'; 
-import { Building2, Lock, Mail, AlertCircle } from 'lucide-center'; // أو lucide-react حسب المكتبة عندك
+import { supabase } from '../lib/supabase'; // تم تصحيح المسار بنقطتين
+import { Building2, Lock, Mail, AlertCircle } from 'lucide-react'; // تم تصحيح الاسم هنا
 
 export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: string) => void }) {
   const [email, setEmail] = useState('');
@@ -41,7 +40,6 @@ export default function Login({ onLoginSuccess }: { onLoginSuccess: (role: strin
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a101e] px-4" dir="rtl">
       <div className="bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md border-t-[10px] border-[#e86024]">
-        
         <div className="text-center mb-10">
           <div className="bg-slate-100 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-inner">
             <Building2 className="text-[#0a101e]" size={40} />
