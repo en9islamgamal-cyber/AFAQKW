@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 
-// 1. استيراد مكونات الموقع الرئيسي (واجهة الشركة)
-import Navigation from './components/ui/Navigation';
+// 1. استيراد مكونات الموقع الرئيسي (تم إصلاح المسار هنا 🚀)
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import HeroSection from './sections/HeroSection';
 import CapabilitiesSection from './sections/CapabilitiesSection';
 import MEPSection from './sections/MEPSection';
@@ -11,10 +12,9 @@ import ProjectSpotlightSection from './sections/ProjectSpotlightSection';
 import ProcessSection from './sections/ProcessSection';
 import SafetySection from './sections/SafetySection';
 import ContactSection from './sections/ContactSection';
-import Footer from './components/ui/Footer';
 
-// 2. استيراد مكونات البوابة (شغلنا)
-import Login from './sections/Login'; // دي صفحة الدخول الدارك بتاعتك
+// 2. استيراد مكونات البوابة
+import Login from './sections/Login'; 
 import AdminDashboard from './sections/AdminDashboard';
 import ClientDashboard from './sections/ClientDashboard';
 
@@ -23,7 +23,6 @@ export default function App() {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  // المتغير اللي بيتحكم إحنا في الموقع برة ولا جوه البوابة
   const [showPortal, setShowPortal] = useState(false);
 
   useEffect(() => {
@@ -49,14 +48,11 @@ export default function App() {
     window.location.reload(); 
   };
 
-  // الحالة الأولى: عرض الموقع الرئيسي (الوضع الافتراضي)
   if (!showPortal) {
     return (
       <div className="font-sans antialiased text-slate-200 bg-[#0a0f1c]" dir="rtl">
-        {/* شريط التنقل */}
         <Navigation />
         
-        {/* محتوى الموقع */}
         <main>
           <HeroSection />
           <CapabilitiesSection />
@@ -70,7 +66,6 @@ export default function App() {
         
         <Footer />
 
-        {/* زرار عائم للدخول للبوابة (عشان لو زرار الـ Navigation لسه متربطش) */}
         <button 
           onClick={() => setShowPortal(true)}
           className="fixed bottom-8 left-8 z-50 bg-[#e86024] hover:bg-[#c04b19] text-white px-6 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 transition-transform hover:scale-105 border-2 border-white/10"
@@ -82,7 +77,6 @@ export default function App() {
     );
   }
 
-  // الحالة الثانية: البوابة الإلكترونية
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#0a0f1c] text-[#e86024] font-bold text-xl" dir="rtl">
@@ -91,7 +85,6 @@ export default function App() {
     );
   }
 
-  // لو مش مسجل دخول -> يفتح صفحة الـ Login الدارك بتاعتك
   if (!session) {
     return (
       <div className="relative h-screen bg-[#0a0f1c]">
@@ -106,10 +99,8 @@ export default function App() {
     );
   }
 
-  // لو مسجل دخول -> يفتح الداشبورد (أدمن أو عميل)
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50">
-      {/* زرار صغير للرجوع للموقع الأساسي من الداشبورد */}
       <div className="bg-blue-950 px-4 py-2 text-left">
          <button onClick={() => setShowPortal(false)} className="text-blue-300 hover:text-white text-sm font-bold">
             العودة لواجهة الموقع 🏠
