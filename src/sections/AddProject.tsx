@@ -23,13 +23,15 @@ export default function AddProject() {
     setMessage('⏳ جاري تأسيس الحساب والمشروع...');
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      // تم دمج الرابط والمفتاح الخاص بك مباشرة هنا لإنشاء "العميل الخفي"
+      const supabaseUrl = 'https://havhdhrqoyjexyzwsetk.supabase.co';
+      const supabaseAnonKey = 'sb_publishable_eGXU8YTQPQ4BdHQRsnBHxA_ILwX-6qB';
 
       const tempClient = createClient(supabaseUrl, supabaseAnonKey, {
-        auth: { persistSession: false }
+        auth: { persistSession: false } // يمنع تسجيل خروج الأدمن
       });
 
+      // إنشاء حساب العميل الجديد
       const { error: authError } = await tempClient.auth.signUp({
         email: clientEmail,
         password: clientPassword,
@@ -37,6 +39,7 @@ export default function AddProject() {
 
       if (authError) throw authError;
 
+      // تسجيل بيانات المشروع في قاعدة البيانات
       const { error: dbError } = await supabase
         .from('projects')
         .insert([{ 
@@ -64,7 +67,7 @@ export default function AddProject() {
     }
   };
 
-  // كلاس موحد للخانات عشان نضمن إن الخط غامق وواضح
+  // كلاس موحد للخانات لضمان أن الخط غامق وواضح (حل مشكلة الخط الأبيض)
   const inputStyles = "w-full border-2 border-slate-200 p-3 rounded-xl focus:border-[#e86024] outline-none text-slate-900 bg-white placeholder-slate-400 font-bold";
 
   return (
