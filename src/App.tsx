@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 
-// 1. استيراد مكونات الموقع الرئيسي (تم إصلاح المسار هنا 🚀)
+// 1. استيراد مكونات الموقع الرئيسي
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import HeroSection from './sections/HeroSection';
@@ -24,6 +24,27 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   
   const [showPortal, setShowPortal] = useState(false);
+  
+  // متغير ذكي لمعرفة لغة الموقع الحالية
+  const [isArabic, setIsArabic] = useState(true);
+
+  useEffect(() => {
+    // دالة لتحديث اللغة بناءً على الـ HTML tag
+    const updateLang = () => {
+      const currentDir = document.documentElement.dir;
+      const currentLang = document.documentElement.lang;
+      setIsArabic(currentDir === 'rtl' || currentLang.includes('ar'));
+    };
+
+    // التحقق فور فتح الموقع
+    updateLang();
+
+    // مراقبة أي تغيير في اللغة (عشان لما العميل يدوس على زرار تغيير اللغة)
+    const observer = new MutationObserver(updateLang);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['dir', 'lang'] });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     async function checkUser() {
@@ -48,9 +69,10 @@ export default function App() {
     window.location.reload(); 
   };
 
+  // الحالة الأولى: عرض الموقع الرئيسي (شيلنا الـ dir الثابت من هنا)
   if (!showPortal) {
     return (
-      <div className="font-sans antialiased text-slate-200 bg-[#0a0f1c]" dir="rtl">
+      <div className="font-sans antialiased text-slate-200 bg-[#0a0f1c]">
         <Navigation />
         
         <main>
@@ -66,17 +88,20 @@ export default function App() {
         
         <Footer />
 
+        {/* الزرار العائم الديناميكي (بيتغير لغته ومكانه) */}
         <button 
           onClick={() => setShowPortal(true)}
-          className="fixed bottom-8 left-8 z-50 bg-[#e86024] hover:bg-[#c04b19] text-white px-6 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 transition-transform hover:scale-105 border-2 border-white/10"
+          className={`fixed bottom-8 ${isArabic ? 'left-8' : 'right-8'} z-50 bg-[#e86024] hover:bg-[#c04b19] text-white px-6 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 transition-transform hover:scale-105 border-2 border-white/10`}
+          dir={isArabic ? 'rtl' : 'ltr'}
         >
           <span>🔐</span>
-          بوابة العملاء
+          <span>{isArabic ? 'بوابة العملاء' : 'Client Portal'}</span>
         </button>
       </div>
     );
   }
 
+  // الحالة الثانية: البوابة الإلكترونية
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#0a0f1c] text-[#e86024] font-bold text-xl" dir="rtl">
