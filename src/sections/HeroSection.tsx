@@ -73,11 +73,11 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
         <div className={`max-w-[46vw] mt-[4vh] ${isAr ? 'text-right' : 'text-left'}`}>
           <div ref={headlineRef} className={`flex flex-col gap-4 mb-8 transform-gpu will-change-transform ${isAr ? 'items-end' : 'items-start'}`}>
-            <img src="/logo1.png" alt="Logo" className="logo-img w-32 md:w-48 lg:w-56" />
+            <img src="/logo1.png" alt="Logo Circle" className="logo-img w-32 md:w-48 lg:w-56" />
             <img src="/logo2.png" alt="Logo Text" className="logo-img w-64 md:w-80 lg:w-[450px]" />
           </div>
           <p ref={subheadlineRef} className="text-body text-gray-cool max-w-[34vw] mb-8 leading-relaxed text-lg font-bold">
-            {isAr ? 'تنفيذ متكامل للأعمال الكهروميكانيكية (MEP)، البنية التحتية، والمقاولات العامة.' : 'Integrated MEP, infrastructure, and general contracting services.'}
+            {isAr ? 'تنفيذ متكامل للأعمال الكهروميكانيكية (MEP)، البنية التحتية، والمقاولات العامة — بدقة واحترافية.' : 'Full MEP, infrastructure, and general contracting services—delivered with precision.'}
           </p>
           <div ref={ctaRef} className="flex flex-wrap gap-4">
             <button onClick={() => scrollToSection('#contact')} className="btn-primary flex items-center gap-2">
@@ -90,10 +90,10 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
               <div className="status-dot" />
-              <span className="font-mono text-xs text-gray-cool">{isAr ? 'مشروع حالي' : 'Active'}</span>
+              <span className="font-mono text-xs uppercase text-gray-cool">{isAr ? 'مشروع حالي' : 'Active'}</span>
             </div>
             <h3 className="text-xl font-black text-white mb-3">{isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets'}</h3>
-            <p className="text-sm text-gray-cool mb-4">{isAr ? 'أعمال التكييف والتشطيبات لعدد ١٢ شاليه.' : 'HVAC and finishes for 12 chalets.'}</p>
+            <p className="text-sm text-gray-cool mb-4">{isAr ? 'أعمال التكييف والتشطيبات لعدد ١٢ شاليه فاخر.' : 'HVAC and finishes for 12 luxury chalets.'}</p>
           </div>
         </div>
       </div>
