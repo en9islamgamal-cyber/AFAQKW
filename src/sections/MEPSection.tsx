@@ -47,30 +47,39 @@ const MEPSection = ({ className = '' }: MEPSectionProps) => {
   ];
 
   return (
-    <section ref={sectionRef} className={`section-pinned relative overflow-hidden ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform" style={{ backgroundImage: 'url(/hvac_mechanical_room.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 hero-gradient pointer-events-none" />
+    <section ref={sectionRef} className={`section-pinned relative overflow-hidden bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+      
+      {/* التعديل: الصورة بصيغة WebP وشفافية أقل */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform opacity-60" style={{ backgroundImage: 'url(/hvac_mechanical_room.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      
+      {/* التعديل: فلتر أبيض شفاف (Light Overlay) بدل الغامق */}
+      <div className="absolute inset-0 bg-white/70 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
+        
         <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+          {/* التعديل: العناوين كحلي داكن */}
+          <h2 className="font-heading text-4xl lg:text-6xl font-black text-[#0F172A] leading-tight mb-6">
             {isAr ? 'أنظمة كهروميكانيكية' : 'MEP that performs'}<br />
-            <span className="text-[#e86024]">{isAr ? 'تعمل بأقصى كفاءة.' : 'under load.'}</span>
+            <span className="text-[#FF6A00]">{isAr ? 'تعمل بأقصى كفاءة.' : 'under load.'}</span>
           </h2>
-          <p className="text-lg text-slate-300 max-w-[34vw] leading-relaxed font-bold">
+          <p className="text-lg text-[#1F2937] max-w-[34vw] leading-relaxed font-bold">
             {isAr ? 'تكييف، سباكة، مكافحة حريق، وكهرباء — مصممة لسهولة الصيانة.' : 'HVAC, plumbing, firefighting, and electrical—designed for maintainability.'}
           </p>
         </div>
 
-        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <h3 className="text-xl font-black text-white mb-6">
+        {/* التعديل: الكارت بقى أبيض ناصع مع Shadow وبوردر خفيف */}
+        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white shadow-2xl border border-gray-100 rounded-[2.5rem] p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+          <h3 className="text-2xl font-black text-[#0F172A] mb-8 border-b border-gray-100 pb-4">
             {isAr ? 'الأنظمة الكهروميكانيكية (MEP)' : 'MEP Systems'}
           </h3>
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {mepServices.map((service, index) => (
-              <li key={index} className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#e86024]/20 flex items-center justify-center flex-shrink-0 mt-1"><service.icon className="w-5 h-5 text-[#e86024]" /></div>
-                <span className="text-sm text-slate-200 font-bold leading-relaxed">{service.text}</span>
+              <li key={index} className="flex items-start gap-4 group">
+                <div className="w-12 h-12 rounded-2xl bg-[#FF6A00]/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[#FF6A00] transition-colors duration-300">
+                  <service.icon className="w-6 h-6 text-[#FF6A00] group-hover:text-white transition-colors duration-300" />
+                </div>
+                <span className="text-base text-[#1F2937] font-black leading-relaxed pt-2">{service.text}</span>
               </li>
             ))}
           </ul>
