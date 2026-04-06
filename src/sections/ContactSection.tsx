@@ -73,19 +73,21 @@ const ContactSection = ({ className = '' }: ContactSectionProps) => {
   };
 
   const contactInfo = isAr ? [
-    { icon: Mail, label: 'البريد الإلكتروني', value: 'info@afaqaltatweer.com' },
-    { icon: Phone, label: 'الهاتف', value: '+965 22061033' },
-    { icon: MapPin, label: 'الموقع', value: 'الكويت - المرقاب' },
+    { icon: Mail, label: 'البريد الإلكتروني', value: 'info@afaqkw.online' },
+    { icon: Phone, label: 'الهاتف', value: '+965 96951688' },
+    { icon: MapPin, label: 'الموقع', value: 'الكويت - الفروانية - شارع حبيب المناور' },
   ] : [
-    { icon: Mail, label: 'Email', value: 'info@afaqaltatweer.com' },
-    { icon: Phone, label: 'Phone', value: '+965 22061033' },
-    { icon: MapPin, label: 'Location', value: 'Kuwait - Al Mirqab' },
+    { icon: Mail, label: 'Email', value: 'info@afaqkw.online' },
+    { icon: Phone, label: 'Phone', value: '+965 96951688' },
+    { icon: MapPin, label: 'Location', value: 'Habib Al-Munawer St, Farwaniya, Kuwait' },
   ];
 
   return (
     <section id="contact" ref={sectionRef} className={`relative bg-white py-20 lg:py-32 ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
       <div className="px-6 lg:px-[7vw]">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+          
+          {/* الجانب الأيمن: معلومات التواصل */}
           <div ref={leftColRef} className={`lg:w-[45%] lg:pt-8 ${isAr ? 'text-right' : 'text-left'}`}>
             <h2 className="font-heading text-4xl lg:text-6xl font-black text-[#0F172A] leading-tight mb-6">
               {isAr ? 'دعنا نبني' : "Let's build your"}<br />
@@ -94,6 +96,7 @@ const ContactSection = ({ className = '' }: ContactSectionProps) => {
             <p className={`text-[#1F2937] mb-10 leading-relaxed max-w-md ${isAr ? 'text-xl font-medium' : 'text-lg'}`}>
               {isAr ? 'أخبرنا بمخططاتك. سنقوم بالرد خلال يومي عمل بنطاق عمل واضح والخطوات التالية للبدء.' : "Tell us what you're planning. We'll respond within two business days with a clear scope and next steps."}
             </p>
+
             <div className="space-y-6 mb-10">
               {contactInfo.map((item, index) => (
                 <div key={index} className="flex items-center gap-5 group">
@@ -108,35 +111,69 @@ const ContactSection = ({ className = '' }: ContactSectionProps) => {
               ))}
             </div>
           </div>
+
+          {/* الجانب الأيسر: فورم طلب عرض السعر */}
           <div ref={formCardRef} className={`lg:w-[55%] ${isAr ? 'lg:pr-8 text-right' : 'lg:pl-8 text-left'}`}>
             <div className="bg-[#F8F9FA] border border-gray-200 rounded-[2.5rem] p-8 lg:p-12 shadow-xl relative overflow-hidden">
+              
               {isSubmitted ? (
-                <div className="text-center py-12">
+                <div className="text-center py-12 animate-in zoom-in duration-500">
                   <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
                     <Send className="w-10 h-10 text-green-600" />
                   </div>
-                  <h3 className="text-2xl font-black text-[#0F172A] mb-3">{isAr ? 'تم الإرسال بنجاح!' : 'Sent Successfully!'}</h3>
-                  <button onClick={() => setIsSubmitted(false)} className="mt-8 text-[#FF6A00] font-black underline italic">إرسال طلب آخر</button>
+                  <h3 className="text-2xl font-black text-[#0F172A] mb-3">{isAr ? 'تم إرسال طلبك بنجاح!' : 'Request Sent Successfully!'}</h3>
+                  <p className="text-[#1F2937] font-medium">
+                    {isAr ? 'شكراً لثقتك في آفاق. سيتواصل معك أحد مهندسينا قريباً.' : "Thank you for your trust. One of our engineers will contact you soon."}
+                  </p>
+                  <button onClick={() => setIsSubmitted(false)} className="mt-8 text-[#FF6A00] font-black underline italic hover:text-orange-700">إرسال طلب آخر</button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {error && <p className="text-red-600 text-sm font-bold bg-red-50 p-3 rounded-lg border border-red-200">{error}</p>}
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'الاسم' : 'Name'}</label>
-                      <Input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold" />
+                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'الاسم بالكامل' : 'Full Name'}</label>
+                      <Input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder={isAr ? 'مثال: محمد أحمد' : 'e.g. John Doe'} required className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold shadow-sm" />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'البريد' : 'Email'}</label>
-                      <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold" />
+                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'البريد الإلكتروني' : 'Email'}</label>
+                      <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="email@afaq.com" required className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold shadow-sm" />
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'رقم الهاتف' : 'Phone Number'}</label>
+                      <Input type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="+965 ---- ----" required className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold shadow-sm" />
+                    </div>
+                    <div className="space-y-2" dir={isAr ? 'rtl' : 'ltr'}>
+                      <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'نوع الخدمة' : 'Service Type'}</label>
+                      <Select value={formData.projectType} onValueChange={(value) => setFormData({ ...formData, projectType: value })}>
+                        <SelectTrigger className="h-14 bg-white border-gray-300 text-[#0F172A] rounded-xl focus:border-[#FF6A00] font-bold shadow-sm">
+                          <SelectValue placeholder={isAr ? 'اختر التخصص' : 'Select Service'} />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-gray-200 text-[#0F172A] font-bold shadow-lg">
+                          <SelectItem value="MEP">{isAr ? 'أنظمة كهروميكانيكية (MEP)' : 'MEP Systems'}</SelectItem>
+                          <SelectItem value="Construction">{isAr ? 'مقاولات عامة' : 'General Construction'}</SelectItem>
+                          <SelectItem value="Firefighting">{isAr ? 'أنظمة مكافحة الحريق' : 'Firefighting Systems'}</SelectItem>
+                          <SelectItem value="Infrastructure">{isAr ? 'بنية تحتية' : 'Infrastructure'}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <label className="text-xs text-[#1F2937] font-black uppercase tracking-widest">{isAr ? 'تفاصيل المشروع' : 'Project Details'}</label>
-                    <Textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={4} required className="bg-white border-gray-300 text-[#0F172A] rounded-2xl focus:border-[#FF6A00] font-bold" />
+                    <Textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} placeholder={isAr ? 'اكتب باختصار عن مشروعك...' : 'Briefly describe your project...'} rows={4} required className="bg-white border-gray-300 text-[#0F172A] rounded-2xl focus:border-[#FF6A00] font-bold resize-none shadow-sm" />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full py-5 bg-[#FF6A00] hover:bg-orange-600 text-white rounded-2xl font-black text-xl transition-all shadow-lg flex items-center justify-center gap-3">
-                    {isSubmitting ? 'جاري الإرسال...' : isAr ? 'طلب عرض سعر الآن' : 'Request Quote Now'}
+
+                  <button type="submit" disabled={isSubmitting} className="w-full py-5 bg-[#FF6A00] hover:bg-orange-600 text-white rounded-2xl font-black text-xl transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-50">
+                    {isSubmitting ? (
+                      <><div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" /> {isAr ? 'جاري الإرسال...' : 'Sending...'}</>
+                    ) : (
+                      <>{isAr ? 'طلب عرض سعر الآن' : 'Request Quote Now'} {isAr ? <ArrowLeft size={24} /> : <ArrowRight size={24} />}</>
+                    )}
                   </button>
                 </form>
               )}
