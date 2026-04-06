@@ -50,48 +50,58 @@ const ProjectSpotlightSection = ({ className = '' }: ProjectSpotlightSectionProp
   ];
 
   return (
-    <section id="projects" ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+    // التعديل: خلفية احتياطية فاتحة
+    <section id="projects" ref={sectionRef} className={`section-pinned bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+      
+      {/* التعديل: تغيير الصورة لـ .webp وتقليل شفافيتها */}
       <div 
         ref={bgRef} 
-        className="absolute inset-0 w-full h-full" 
-        style={{ backgroundImage: 'url(/othman_complex.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} 
+        className="absolute inset-0 w-full h-full transform-gpu will-change-transform opacity-60" 
+        style={{ backgroundImage: 'url(/othman_complex.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} 
       />
-      <div className="absolute inset-0 hero-gradient" />
+      
+      {/* التعديل: فلتر أبيض شفاف بدل الـ Dark Gradient */}
+      <div className="absolute inset-0 bg-white/70 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
-        <div ref={headlineRef} className={`max-w-[44vw] ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
+        
+        <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
+          {/* التعديل: العناوين كحلي داكن */}
+          <h2 className="font-heading text-section font-black text-[#0F172A] leading-[1.05] mb-6 drop-shadow-sm">
             {isAr ? 'مجمع' : 'Al-Othman'}<br />
-            <span className="text-primary">{isAr ? 'العثمان.' : 'Complex.'}</span>
+            <span className="text-[#FF6A00]">{isAr ? 'العثمان.' : 'Complex.'}</span>
           </h2>
-          <p className={`text-body text-gray-cool max-w-[34vw] leading-relaxed ${isAr ? 'text-lg' : ''}`}>
+          <p className={`text-body text-[#1F2937] font-medium max-w-[34vw] leading-relaxed ${isAr ? 'text-xl' : ''}`}>
             {isAr ? 'توريد وتركيب أنظمة تهوية الحريق ومراوح سحب الدخان (Smoke Exhaust Fans)، وتأسيس دكتات الصاج المجلفن وفقاً لأعلى معايير السلامة.' : "Supply and installation of advanced fire ventilation and rooftop smoke exhaust fan systems, featuring heavy-duty galvanized steel ductwork."}
           </p>
         </div>
 
-        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <h3 className={`font-heading text-lg text-white mb-6 ${isAr ? 'font-bold' : 'font-semibold'}`}>
+        {/* التعديل: الكارت بقى أبيض ناصع مع Shadow وشلت الـ glass-card الغامق */}
+        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white rounded-2xl shadow-xl border border-gray-200 p-6 lg:p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+          <h3 className={`font-heading text-2xl text-[#0F172A] mb-6 border-b border-gray-100 pb-4 ${isAr ? 'font-black' : 'font-bold'}`}>
             {isAr ? 'إحصائيات وتفاصيل المشروع' : 'Project Metrics'}
           </h3>
-          <div className="space-y-0">
+          
+          <div className="space-y-4">
             {metrics.map((metric, index) => (
-              <div key={index} className="metric-row">
-                <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse w-full justify-end' : ''}`}>
-                  <metric.icon className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-gray-cool">{metric.label}</span>
+              <div key={index} className={`flex flex-col border-b border-gray-100 pb-3 last:border-0 last:pb-0 ${isAr ? 'items-start' : 'items-start'}`}>
+                <div className={`flex items-center gap-2 mb-1 ${isAr ? 'flex-row-reverse w-full justify-end' : ''}`}>
+                  <metric.icon className="w-4 h-4 text-[#FF6A00]" strokeWidth={2.5} />
+                  <span className="text-sm font-bold text-[#1F2937]/70 uppercase tracking-wide">{metric.label}</span>
                 </div>
-                <span className={`text-sm font-medium text-white ${isAr ? 'text-left w-full block mt-1' : ''}`} dir={isAr ? 'rtl' : 'ltr'}>{metric.value}</span>
+                <span className={`text-base font-black text-[#0F172A] ${isAr ? 'text-right w-full block' : ''}`} dir={isAr ? 'rtl' : 'ltr'}>{metric.value}</span>
               </div>
             ))}
           </div>
-          <button className={`mt-6 inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
+
+          <button className={`mt-8 px-6 py-3 bg-[#F8F9FA] border border-gray-200 rounded-lg inline-flex items-center gap-2 text-[#0F172A] text-sm font-bold hover:bg-[#FF6A00] hover:text-white hover:border-[#FF6A00] transition-all duration-300 w-full justify-center ${isAr ? 'flex-row-reverse' : ''}`}>
             {isAr ? 'عرض تفاصيل الأعمال (Gallery)' : 'View Project Gallery'}
             {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           </button>
         </div>
 
-        <div ref={microLabelRef} className={`absolute bottom-[10vh] ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
-          <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
+        <div ref={microLabelRef} className={`absolute bottom-[10vh] transform-gpu will-change-transform ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
+          <span className={`text-sm tracking-wide text-[#0F172A] bg-white/80 px-4 py-2 rounded-full shadow-sm font-medium ${isAr ? 'font-bold' : ''}`}>
             {isAr ? 'مشاريع تجارية • أنظمة مكافحة الحريق • إلكتروميكانيك' : 'Commercial • Fire Fighting Systems • MEP'}
           </span>
         </div>
