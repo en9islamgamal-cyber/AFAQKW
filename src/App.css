@@ -5,10 +5,9 @@
   width: 100%;
   margin: 0;
   padding: 0;
-  text-align: right; /* عشان يدعم العربي كديفولت */
 }
 
-/* ضبط السلاسة في الحركة */
+/* ضبط السلاسة في الحركة والخلفية البيضاء ناصعة */
 html {
   scroll-behavior: smooth;
   background-color: #ffffff;
@@ -18,21 +17,22 @@ body {
   margin: 0;
   padding: 0;
   background-color: #ffffff;
-  color: #0F172A; /* الكحلي الداكن بتاعنا */
+  color: #0F172A; /* الكحلي الداكن المعتمد */
   overflow-x: hidden;
+  font-family: 'Cairo', 'Almarai', sans-serif;
 }
 
-/* تحسين شكل السكرول بار (Scrollbar) عشان يليق بالفواتح */
+/* تحسين شكل السكرول بار (Scrollbar) برتقالي شيك */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f8f9fa;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FF6A00; /* البرتقالي بتاعنا */
+  background: #FF6A00;
   border-radius: 10px;
 }
 
@@ -40,15 +40,10 @@ body {
   background: #e86024;
 }
 
-/* كلاسات مساعدة للخطوط */
-.font-arabic {
-  font-family: 'Cairo', 'Almarai', sans-serif;
-}
-
-/* إضافات لـ GSAP عشان نضمن إن السكاشن المثبتة (Pinned) تشتغل صح */
+/* كلاس أساسي للسكاشن اللي فيها تثبيت (Pin) */
 .section-pinned {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -56,14 +51,7 @@ body {
   overflow: hidden;
 }
 
-/* تحسينات عامة للصور */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* إخفاء أي لوجوهات قديمة لسه بتظهر من الـ CSS */
+/* إخفاء أي لوجوهات قديمة لسه بتظهر من الـ CSS الافتراضي */
 .logo {
   display: none;
 }
