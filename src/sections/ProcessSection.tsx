@@ -51,34 +51,38 @@ const ProcessSection = ({ className = '' }: ProcessSectionProps) => {
   };
 
   return (
-    <section ref={sectionRef} className={`relative bg-navy-900 py-20 lg:py-32 ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(20,27,42,0.5) 0%, transparent 70%)' }} />
+    // التعديل: الخلفية بقت رمادي فاتح جداً بدل الكحلي الغامق
+    <section ref={sectionRef} className={`relative bg-[#F8F9FA] py-20 lg:py-32 ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: 'radial-gradient(ellipse at center, rgba(255,106,0,0.05) 0%, transparent 70%)' }} />
+      
       <div className="relative z-10 px-6 lg:px-[7vw]">
         <div ref={headlineRef} className={`mb-16 lg:mb-24 ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
-            {isAr ? 'كيف' : 'How we'} <span className="text-primary">{isAr ? 'ننفذ أعمالنا.' : 'deliver.'}</span>
+          {/* التعديل: العناوين كحلي داكن */}
+          <h2 className="font-heading text-4xl lg:text-6xl font-black text-[#0F172A] leading-[1.05] mb-6">
+            {isAr ? 'كيف' : 'How we'} <span className="text-[#FF6A00]">{isAr ? 'ننفذ أعمالنا.' : 'deliver.'}</span>
           </h2>
-          <p className={`text-body text-gray-cool max-w-xl leading-relaxed ${isAr ? 'text-lg' : ''}`}>
+          <p className={`text-[#1F2937] max-w-xl leading-relaxed font-medium ${isAr ? 'text-xl' : 'text-lg'}`}>
             {isAr ? 'عملية واضحة وممنهجة — نطاق عمل محدد، ضوابط صارمة، وتسليم نظيف.' : 'A simple, repeatable process—clear scope, tight controls, clean handover.'}
           </p>
         </div>
 
         <div ref={stepsRef} className={`relative max-w-3xl ${isAr ? 'mr-auto ml-0' : 'ml-auto mr-0'}`}>
-          {/* الخط الطولي بيعكس مكانه يمين أو شمال بناءً على اللغة */}
-          <div ref={lineRef} className={`absolute top-0 w-[3px] h-full bg-primary origin-top ${isAr ? 'right-[19px] lg:right-[23px]' : 'left-[19px] lg:left-[23px]'}`} />
+          {/* التعديل: الخط الطولي بقى برتقالي */}
+          <div ref={lineRef} className={`absolute top-0 w-[3px] h-full bg-[#FF6A00] origin-top opacity-30 ${isAr ? 'right-[19px] lg:right-[23px]' : 'left-[19px] lg:left-[23px]'}`} />
 
           <div className="space-y-12 lg:space-y-16">
             {steps.map((step, index) => (
-              <div key={index} className={`process-step relative flex gap-6 lg:gap-8 ${isAr ? 'text-right' : 'text-left'}`}>
-                <div className="relative z-10 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                  <step.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+              <div key={index} className={`process-step relative flex gap-6 lg:gap-10 ${isAr ? 'text-right' : 'text-left'}`}>
+                {/* التعديل: الدوائر بقت برتقالية وبوردر أبيض */}
+                <div className="relative z-10 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#FF6A00] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#FF6A00]/20 border-4 border-white">
+                  <step.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" strokeWidth={2.5} />
                 </div>
-                <div className="flex-1 pt-2">
+                <div className="flex-1 pt-1 lg:pt-2">
                   <div className={`flex items-center gap-3 mb-2 ${isAr ? 'justify-start' : ''}`}>
-                    <span className="font-mono text-xs text-primary">{step.number}</span>
-                    <h3 className={`font-heading text-xl lg:text-2xl text-white ${isAr ? 'font-bold' : 'font-semibold'}`}>{step.title}</h3>
+                    <span className="font-black text-sm text-[#FF6A00] font-mono tracking-tighter">{step.number}</span>
+                    <h3 className={`font-heading text-2xl lg:text-3xl text-[#0F172A] ${isAr ? 'font-black' : 'font-bold'}`}>{step.title}</h3>
                   </div>
-                  <p className="text-sm lg:text-base text-gray-cool leading-relaxed">{step.description}</p>
+                  <p className="text-base lg:text-lg text-[#1F2937] font-medium leading-relaxed opacity-80">{step.description}</p>
                 </div>
               </div>
             ))}
@@ -86,9 +90,10 @@ const ProcessSection = ({ className = '' }: ProcessSectionProps) => {
         </div>
 
         <div className={`mt-16 lg:mt-24 flex ${isAr ? 'justify-start' : 'justify-start'}`}>
-          <button onClick={scrollToContact} className={`btn-primary gap-2 flex items-center ${isAr ? 'flex-row-reverse' : ''}`}>
-            {isAr ? 'ابدأ مشروعك' : 'Start a project'}
-            {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          {/* التعديل: زرار برتقالي صريح */}
+          <button onClick={scrollToContact} className={`px-10 py-5 bg-[#FF6A00] hover:bg-orange-600 text-white font-black rounded-2xl transition-all shadow-xl shadow-orange-200 flex items-center gap-3 transform hover:-translate-y-1 ${isAr ? 'flex-row-reverse' : ''}`}>
+            {isAr ? 'ابدأ مشروعك الآن' : 'Start a project now'}
+            {isAr ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
           </button>
         </div>
       </div>
