@@ -38,13 +38,13 @@ const PortalSection = ({ className = '' }: PortalSectionProps) => {
   }, [isAr]);
 
   const dashboardMetrics = isAr ? [
-    { icon: TrendingUp, label: 'نسبة الإنجاز', value: '72%', color: 'text-green-400' },
-    { icon: MessageSquare, label: 'طلبات استعلام (RFIs)', value: '4', color: 'text-yellow-400' },
-    { icon: CreditCard, label: 'فواتير معلقة', value: '—', color: 'text-gray-cool' },
+    { icon: TrendingUp, label: 'نسبة الإنجاز', value: '72%', color: 'text-green-600' },
+    { icon: MessageSquare, label: 'طلبات استعلام (RFIs)', value: '4', color: 'text-orange-600' },
+    { icon: CreditCard, label: 'فواتير معلقة', value: '—', color: 'text-gray-400' },
   ] : [
-    { icon: TrendingUp, label: 'Progress', value: '72%', color: 'text-green-400' },
-    { icon: MessageSquare, label: 'Open RFIs', value: '4', color: 'text-yellow-400' },
-    { icon: CreditCard, label: 'Pending invoice', value: '—', color: 'text-gray-cool' },
+    { icon: TrendingUp, label: 'Progress', value: '72%', color: 'text-green-600' },
+    { icon: MessageSquare, label: 'Open RFIs', value: '4', color: 'text-orange-600' },
+    { icon: CreditCard, label: 'Pending invoice', value: '—', color: 'text-gray-400' },
   ];
 
   const portalFeatures = isAr ? [
@@ -58,65 +58,73 @@ const PortalSection = ({ className = '' }: PortalSectionProps) => {
   ];
 
   return (
-    <section id="portal" ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      <div ref={bgRef} className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/office_meeting.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 hero-gradient" />
+    <section id="portal" ref={sectionRef} className={`section-pinned relative overflow-hidden bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
+      
+      {/* التعديل: الصورة بصيغة WebP وشفافية نهارية ناعمة */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform opacity-50" style={{ backgroundImage: 'url(/office_meeting.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      
+      {/* التعديل: فلتر أبيض شفاف (Light Overlay) */}
+      <div className="absolute inset-0 bg-white/80 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
-        <div ref={headlineRef} className={`max-w-[44vw] ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
+        
+        <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
+          {/* التعديل: العناوين كحلي داكن */}
+          <h2 className="font-heading text-4xl lg:text-6xl font-black text-[#0F172A] leading-[1.05] mb-6 drop-shadow-sm">
             {isAr ? 'تابع كل تفصيلة.' : 'Track everything.'}<br />
-            <span className="text-primary">{isAr ? 'ولا تفوت شيئاً.' : 'Miss nothing.'}</span>
+            <span className="text-[#FF6A00]">{isAr ? 'ولا تفوت شيئاً.' : 'Miss nothing.'}</span>
           </h2>
-          <p className={`text-body text-gray-cool max-w-[34vw] leading-relaxed ${isAr ? 'text-lg' : ''}`}>
+          <p className={`text-[#1F2937] max-w-[34vw] leading-relaxed font-bold ${isAr ? 'text-xl' : 'text-lg'}`}>
             {isAr ? 'لوحة تحكم حية لمتابعة الإنجاز، المستندات، طلبات الاستعلام (RFIs)، والماليات — تُحدث أسبوعياً.' : 'A live dashboard for progress, documents, RFIs, and financials—updated weekly.'}
           </p>
         </div>
 
-        <div ref={cardRef} className={`absolute top-[14vh] w-full max-w-[420px] lg:w-[36vw] glass-card rounded-xl p-6 lg:p-8 ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <div className="flex items-center justify-between mb-6">
-            <h3 className={`font-heading text-lg text-white ${isAr ? 'font-bold' : 'font-semibold'}`}>
+        {/* التعديل: كارت لوحة التحكم بقى أبيض ناصع مع Shadow وشلت الـ glass-card */}
+        <div ref={cardRef} className={`absolute top-[14vh] w-full max-w-[420px] lg:w-[36vw] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 p-8 lg:p-10 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className={`font-heading text-2xl text-[#0F172A] ${isAr ? 'font-black' : 'font-bold'}`}>
               {isAr ? 'لوحة تحكم المشروع' : 'Project Dashboard'}
             </h3>
-            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : ''}`}>
-              <div className="status-dot" />
-              <span className="text-xs text-gray-cool">{isAr ? 'مباشر' : 'Live'}</span>
+            <div className={`flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100 ${isAr ? 'flex-row-reverse' : ''}`}>
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-xs font-black text-green-700 uppercase tracking-tighter">{isAr ? 'مباشر' : 'Live'}</span>
             </div>
           </div>
 
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4 mb-8">
             {dashboardMetrics.map((metric, index) => (
-              <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
-                  <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"><metric.icon className="w-4 h-4 text-primary" /></div>
-                  <span className="text-sm text-gray-cool">{metric.label}</span>
+              <div key={index} className={`flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-gray-100 group hover:border-[#FF6A00]/20 transition-colors`}>
+                <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-10 h-10 rounded-xl bg-[#FF6A00]/10 flex items-center justify-center">
+                    <metric.icon className="w-5 h-5 text-[#FF6A00]" />
+                  </div>
+                  <span className="text-sm font-bold text-[#1F2937]">{metric.label}</span>
                 </div>
-                <span className={`text-lg font-semibold ${metric.color}`} dir="ltr">{metric.value}</span>
+                <span className={`text-xl font-black ${metric.color}`} dir="ltr">{metric.value}</span>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-8">
             {portalFeatures.map((feature, index) => (
-              <div key={index} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5">
-                <feature.icon className="w-3 h-3 text-primary" />
-                <span className="text-xs text-gray-cool">{feature.label}</span>
+              <div key={index} className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200">
+                <feature.icon className="w-3 h-3 text-[#0F172A]" />
+                <span className="text-[10px] font-black text-[#0F172A] uppercase tracking-wide">{feature.label}</span>
               </div>
             ))}
           </div>
 
-          {/* التعديل هنا: الزرار الآن يفتح صفحة تسجيل الدخول */}
           <button 
             onClick={() => window.location.hash = '#login'}
-            className={`w-full inline-flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors ${isAr ? 'flex-row-reverse' : ''}`}
+            className={`w-full inline-flex items-center justify-center gap-3 py-5 bg-[#FF6A00] text-white text-lg font-black rounded-2xl hover:bg-orange-600 transition-all shadow-lg shadow-orange-200 ${isAr ? 'flex-row-reverse' : ''}`}
           >
             {isAr ? 'اطلب صلاحية الدخول للبوابة' : 'Request portal access'}
-            {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+            {isAr ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
           </button>
         </div>
 
-        <div ref={microLabelRef} className={`absolute bottom-[10vh] ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
-          <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
+        <div ref={microLabelRef} className={`absolute bottom-[10vh] transform-gpu will-change-transform ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
+          <span className={`text-sm tracking-wide text-[#0F172A] bg-white/80 px-4 py-2 rounded-full shadow-sm font-medium ${isAr ? 'font-bold' : ''}`}>
             {isAr ? 'تقارير أسبوعية • إدارة المستندات (Document Control) • تتبع الدفعات' : 'Weekly Reports • Document Control • Payment Tracking'}
           </span>
         </div>
