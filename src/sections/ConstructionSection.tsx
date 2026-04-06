@@ -21,7 +21,6 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // تعديل scrub لـ 1 لحركة سلسة
       const scrollTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 1 } });
 
       scrollTl.fromTo(headlineRef.current, { x: isAr ? '50vw' : '-50vw', opacity: 0 }, { x: 0, opacity: 1, ease: 'none' }, 0);
@@ -50,47 +49,52 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
   ];
 
   return (
-    <section ref={sectionRef} className={`section-pinned ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
-      {/* 1. إضافة transform-gpu للخلفية */}
-      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform" style={{ backgroundImage: 'url(/facade_construction.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+    // التعديل: خلفية احتياطية فاتحة
+    <section ref={sectionRef} className={`section-pinned bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
       
-      {/* 2. إلغاء تفاعل الماوس مع الظل لتخفيف الضغط */}
-      <div className="absolute inset-0 hero-gradient pointer-events-none" />
+      {/* التعديل: تغيير الصورة لـ .webp وتقليل شفافيتها */}
+      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform opacity-60" style={{ backgroundImage: 'url(/facade_construction.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      
+      {/* التعديل: فلتر أبيض شفاف بدل الـ Dark Gradient */}
+      <div className="absolute inset-0 bg-white/70 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
-        {/* 3. تفعيل تسريع كارت الشاشة على العنوان */}
+        
         <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
-          <h2 className="font-heading text-section font-bold text-white leading-[1.05] mb-6">
+          {/* التعديل: العناوين كحلي داكن */}
+          <h2 className="font-heading text-section font-black text-[#0F172A] leading-[1.05] mb-6 drop-shadow-sm">
             {isAr ? 'من الهيكل الخرساني' : 'Structure to'}<br />
-            <span className="text-primary">{isAr ? 'إلى التشطيبات.' : 'finishes.'}</span>
+            <span className="text-[#FF6A00]">{isAr ? 'إلى التشطيبات.' : 'finishes.'}</span>
           </h2>
-          <p className={`text-body text-gray-cool max-w-[34vw] leading-relaxed ${isAr ? 'text-lg' : ''}`}>
+          <p className={`text-body text-[#1F2937] font-medium max-w-[34vw] leading-relaxed ${isAr ? 'text-xl' : ''}`}>
             {isAr ? 'أعمال الخرسانة، المباني، الواجهات، والتشطيبات الداخلية — تدار بضوابط صارمة وتقارير يومية.' : 'Concrete, masonry, cladding, and interior build-outs—managed with tight controls and daily reporting.'}
           </p>
         </div>
 
-        {/* 4. تفعيل تسريع كارت الشاشة على الكارت */}
-        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] glass-card rounded-xl p-6 lg:p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
-          <h3 className={`font-heading text-lg text-white mb-6 ${isAr ? 'font-bold' : 'font-semibold'}`}>
+        {/* التعديل: الكارت بقى أبيض ناصع مع Shadow وشلت الـ glass-card الغامق */}
+        <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white rounded-2xl shadow-xl border border-gray-200 p-6 lg:p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
+          <h3 className={`font-heading text-2xl text-[#0F172A] mb-6 border-b border-gray-100 pb-4 ${isAr ? 'font-black' : 'font-bold'}`}>
             {isAr ? 'المقاولات العامة' : 'General Construction'}
           </h3>
           <ul className="space-y-4">
             {constructionServices.map((service, index) => (
               <li key={index} className={`flex items-start gap-3 ${isAr ? 'justify-start' : ''}`}>
-                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5"><service.icon className="w-4 h-4 text-primary" /></div>
-                <span className="text-sm text-gray-cool leading-relaxed">{service.text}</span>
+                <div className="w-8 h-8 rounded-lg bg-[#FF6A00]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <service.icon className="w-4 h-4 text-[#FF6A00]" strokeWidth={2.5} />
+                </div>
+                <span className="text-base font-medium text-[#1F2937] leading-relaxed">{service.text}</span>
               </li>
             ))}
           </ul>
-          <button className={`mt-6 inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all ${isAr ? 'flex-row-reverse' : ''}`}>
+          
+          <button className={`mt-8 px-6 py-3 bg-[#F8F9FA] border border-gray-200 rounded-lg inline-flex items-center gap-2 text-[#0F172A] text-sm font-bold hover:bg-[#FF6A00] hover:text-white hover:border-[#FF6A00] transition-all duration-300 w-full justify-center ${isAr ? 'flex-row-reverse' : ''}`}>
             {isAr ? 'عرض خدمات المقاولات' : 'View construction services'}
             {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* 5. تفعيل تسريع كارت الشاشة على النص الصغير */}
         <div ref={microLabelRef} className={`absolute bottom-[10vh] transform-gpu will-change-transform ${isAr ? 'right-6 lg:right-[7vw]' : 'left-6 lg:left-[7vw]'}`}>
-          <span className={`micro-label ${isAr ? 'font-bold' : ''}`}>
+          <span className={`text-sm tracking-wide text-[#0F172A] bg-white/80 px-4 py-2 rounded-full shadow-sm font-medium ${isAr ? 'font-bold' : ''}`}>
             {isAr ? 'تقارير يومية • قوائم فحص الجودة (Quality Checklists)' : 'Daily Reporting • Quality Checklists'}
           </span>
         </div>
