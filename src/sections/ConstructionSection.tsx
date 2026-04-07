@@ -12,9 +12,8 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
   const headlineRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const microLabelRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLImageElement>(null); // تم التعديل لتناسب عنصر الصورة
+  const bgRef = useRef<HTMLImageElement>(null);
 
-  // استخدمنا useState لضمان عدم حدوث مشاكل Hydration إذا كنت تستخدم Next.js
   const [isAr, setIsAr] = useState(false);
 
   useEffect(() => {
@@ -56,15 +55,14 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
   return (
     <section ref={sectionRef} className={`section-pinned bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
       
-      {/* التعديل الجذري: استخدام وسم img بدلاً من div لضمان ظهور الصورة */}
+      {/* التعديل هنا: غيرنا الامتداد لـ .jpg بناءً على اللي موجود عندك في مجلد public */}
       <img 
         ref={bgRef} 
-        src="/facade_construction.webp" 
+        src="/facade_construction.jpg" 
         alt="Construction Background"
         className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform opacity-60" 
       />
       
-      {/* الفلتر الأبيض الشفاف */}
       <div className="absolute inset-0 bg-white/70 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
