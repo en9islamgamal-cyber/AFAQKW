@@ -59,9 +59,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         {/* كارت المشروع (12 شاليه) */}
         <div className="w-full lg:w-2/5 flex justify-center lg:justify-end mt-12 lg:mt-0">
           <div className="w-full max-w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transform transition-transform hover:scale-[1.02] duration-300">
-            {/* التعديل: صورة الكارت بقت img بدل background */}
+            {/* التعديل: تغيير الامتداد لـ webp عشان يطابق الملف اللي عندك */}
             <img 
-              src="/khiran_chalets.jpg" 
+              src="/khiran_chalets.webp" 
               alt="Khiran Chalets Project" 
               className="h-48 w-full object-cover" 
             />
@@ -70,25 +70,4 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               <div className="flex items-center gap-2 mb-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                <span className="font-mono text-xs uppercase font-bold text-[#1F2937]">
-                  {isAr ? 'مشروع حالي' : 'Active Project'}
-                </span>
-              </div>
-              <h3 className="text-2xl font-black text-[#0F172A] mb-2">
-                {isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets at Khiran'}
-              </h3>
-              <p className="text-sm text-[#1F2937]/80 leading-relaxed font-medium">
-                {isAr ? 'أعمال التكييف والتشطيبات لعدد ١٢ شاليه فاخر.' : 'HVAC and finishes for 12 luxury chalets.'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
-};
-
-export default HeroSection;
+                  <span className="relative inline-flex rounded-full h-
