@@ -42,24 +42,4 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           </div>
         </div>
         <div className="w-full lg:w-2/5 flex justify-center lg:justify-end mt-12 lg:mt-0">
-          <div className="w-full max-w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-            <img src="/khiran_chalets.webp" alt="Khiran" className="h-48 w-full object-cover" />
-            <div className={`p-6 relative z-10 bg-white ${isAr ? 'text-right' : 'text-left'}`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                <span className="font-mono text-xs uppercase font-bold text-[#1F2937]">{isAr ? 'مشروع حالي' : 'Active'}</span>
-              </div>
-              <h3 className="text-2xl font-black text-[#0F172A] mb-2">{isAr ? '١٢ شاليه بمنطقة الخيران' : '12 Chalets'}</h3>
-              <p className="text-sm text-[#1F2937]/80 leading-relaxed font-medium">{isAr ? 'أعمال التكييف والتشطيبات لعدد ١٢ شاليه فاخر.' : 'HVAC and finishes for 12 luxury chalets.'}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default HeroSection;
+          <div className="w-full max-w-[380px] bg
