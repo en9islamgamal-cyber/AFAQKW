@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import AddProject from './AddProject'; // إنشاء عميل
 import ManageProjects from './ManageProjects'; // تحديث المشاريع
+import InboundInquiries from './InboundInquiries';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('create');
@@ -13,6 +14,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex h-screen bg-slate-100 font-sans" dir="rtl">
+<div className="mt-12">
+   <InboundInquiries />
+</div>
       
       {/* القائمة الجانبية */}
       <div className="w-72 bg-[#0a0f1c] text-white p-6 flex flex-col shadow-2xl">
