@@ -39,7 +39,8 @@
   }
   
   body {
-    @apply bg-background text-foreground antialiased;
+    /* التعديل الجذري هنا: خلينا الخلفية الأساسية بيضاء بدل اللون الغامق */
+    @apply bg-white text-gray-900 antialiased;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
   }
