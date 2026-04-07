@@ -1,27 +1,30 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-
-// 1. دي مصفوفة المشاريع (ممكن مستقبلاً تسحبها من API أو ملف JSON)
-const ongoingProjects = [
-  {
-    id: 1,
-    nameAr: "مبارك الكبير - منطقة العمليات",
-    nameEn: "Mubarak Al-Kabeer Port Project",
-    image: "/port_project.jpg" // لو الصورة مش موجودة هيستخدم صورة افتراضية
-  },
-  // تقدر تضيف مشاريع تانية هنا وهتسمع في صفحة الإدارة
-];
+import { supabase } from '../lib/supabase'; // الربط مع الداتابيز بتاعتك
 
 interface HeroSectionProps { className?: string; }
 
 const HeroSection = ({ className = '' }: HeroSectionProps) => {
   const [isAr, setIsAr] = useState(false);
-  
-  // 2. هنسحب أول مشروع من القائمة عشان يظهر في الهيرو
-  const activeProject = ongoingProjects[0];
+  const [latestProject, setLatestProject] = useState<any>(null); // لتخزين المشروع اللي هنسحبه
 
   useEffect(() => {
     setIsAr((localStorage.getItem('lang') || 'EN') === 'AR');
+    
+    // سحب آخر مشروع "قيد التنفيذ" من Supabase
+    const fetchLatestProject = async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('status', 'قيد التنفيذ') // هنجيب اللي شغالين بس
+        .order('created_at', { ascending: false }) // أحدث واحد فوق
+        .limit(1) // واحد بس
+        .single();
+
+      if (data) setLatestProject(data);
+    };
+
+    fetchLatestProject();
   }, []);
 
   const scrollToSection = (href: string) => {
@@ -57,36 +60,40 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           </div>
         </div>
 
-        {/* كارت المشاريع الجارية الديناميكي */}
-        <div className="w-full lg:w-2/5 flex justify-center lg:justify-end mt-12 lg:mt-0">
-          <div className="w-full max-w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden group cursor-pointer" onClick={() => scrollToSection('#projects')}>
-            {/* عرض الصورة إن وجدت، وإلا يعرض صورة ثابتة للمشاريع */}
-            <img 
-              src={activeProject?.image || "/ongoing_projects_placeholder.jpg"} 
-              alt={isAr ? activeProject?.nameAr : activeProject?.nameEn} 
-              className="h-56 w-full object-cover group-hover:scale-105 transition-transform duration-500" 
-            />
-            <div className={`p-6 relative z-10 bg-white ${isAr ? 'text-right' : 'text-left'}`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                <span className="font-mono text-xs uppercase font-black text-green-700">{isAr ? 'مشروع جاري الآن' : 'In Progress'}</span>
+        {/* الكارت اللي أنت عاوزه: مربوط بالداتابيز - صورة واسم فقط */}
+        {latestProject && (
+          <div className="w-full lg:w-2/5 flex justify-center lg:justify-end mt-12 lg:mt-0">
+            <div className="w-full max-w-[380px] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden group cursor-pointer" onClick={() => scrollToSection('#projects')}>
+              
+              {/* صورة المشروع الحقيقية من الداتابيز */}
+              <div className="h-64 overflow-hidden relative">
+                <img 
+                  src={latestProject.image_url || "/khiran_chalets.webp"} 
+                  alt={latestProject.project_name} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                />
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2 border border-gray-100">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-[10px] font-black text-gray-800 uppercase tracking-tighter">
+                    {isAr ? 'مشروع جاري' : 'Ongoing'}
+                  </span>
+                </div>
               </div>
-              
-              {/* عرض اسم المشروع فقط بدون تفاصيل */}
-              <h3 className="text-2xl font-black text-[#0F172A] leading-tight">
-                {isAr ? activeProject?.nameAr : activeProject?.nameEn}
-              </h3>
-              
-              <div className="mt-4 flex items-center gap-2 text-[#FF6A00] font-bold text-sm">
-                <span>{isAr ? 'عرض كافة المشاريع' : 'View all projects'}</span>
-                {isAr ? <ArrowLeft size={16} /> : <ArrowRight size={16} />}
+
+              <div className={`p-8 bg-white ${isAr ? 'text-right' : 'text-left'}`}>
+                {/* اسم المشروع فقط من الداتابيز (client_name أو project_name) */}
+                <h3 className="text-2xl font-black text-[#0F172A] leading-tight">
+                  {latestProject.client_name || latestProject.project_name}
+                </h3>
+                
+                <div className="mt-6 flex items-center gap-2 text-[#FF6A00] font-bold text-sm">
+                  <span>{isAr ? 'التفاصيل في بوابة العملاء' : 'View in Portal'}</span>
+                  {isAr ? <ArrowLeft size={16} /> : <ArrowRight size={16} />}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
