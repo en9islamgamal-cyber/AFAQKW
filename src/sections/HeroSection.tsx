@@ -42,4 +42,28 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           </div>
         </div>
         <div className="w-full lg:w-2/5 flex justify-center lg:justify-end mt-12 lg:mt-0">
-          <div className="w-full max-w-[380px] bg
+          <div className="w-full max-w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+            <img src="/khiran_chalets.webp" alt="Ongoing Projects" className="h-48 w-full object-cover" />
+            <div className={`p-6 relative z-10 bg-white ${isAr ? 'text-right' : 'text-left'}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span className="font-mono text-xs uppercase font-bold text-[#1F2937]">{isAr ? 'مشروع حالي' : 'Active'}</span>
+              </div>
+              <h3 className="text-2xl font-black text-[#0F172A] mb-2">
+                {isAr ? 'مشاريعنا الجارية' : 'Our Ongoing Projects'}
+              </h3>
+              <p className="text-sm text-[#1F2937]/80 leading-relaxed font-medium">
+                {isAr ? 'مجموعة واسعة من مشاريع البناء الكبرى والبنية التحتية الجاري تنفيذها بدقة.' : 'A wide range of major construction and infrastructure projects currently under execution.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
