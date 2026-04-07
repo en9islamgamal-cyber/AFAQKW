@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, ArrowLeft, Building2, Shield, Paintbrush, Truck } from 'lucide-react';
@@ -12,9 +12,14 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
   const headlineRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const microLabelRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLImageElement>(null); // تم التعديل لتناسب عنصر الصورة
 
-  const isAr = (localStorage.getItem('lang') || 'EN') === 'AR';
+  // استخدمنا useState لضمان عدم حدوث مشاكل Hydration إذا كنت تستخدم Next.js
+  const [isAr, setIsAr] = useState(false);
+
+  useEffect(() => {
+    setIsAr((localStorage.getItem('lang') || 'EN') === 'AR');
+  }, []);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -49,19 +54,22 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
   ];
 
   return (
-    // التعديل: خلفية احتياطية فاتحة
     <section ref={sectionRef} className={`section-pinned bg-[#F8F9FA] ${className}`} dir={isAr ? 'rtl' : 'ltr'}>
       
-      {/* التعديل: تغيير الصورة لـ .webp وتقليل شفافيتها */}
-      <div ref={bgRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform opacity-60" style={{ backgroundImage: 'url(/facade_construction.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      {/* التعديل الجذري: استخدام وسم img بدلاً من div لضمان ظهور الصورة */}
+      <img 
+        ref={bgRef} 
+        src="/facade_construction.webp" 
+        alt="Construction Background"
+        className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform opacity-60" 
+      />
       
-      {/* التعديل: فلتر أبيض شفاف بدل الـ Dark Gradient */}
+      {/* الفلتر الأبيض الشفاف */}
       <div className="absolute inset-0 bg-white/70 pointer-events-none z-0" />
 
       <div className="relative z-10 w-full h-full flex flex-col justify-center px-6 lg:px-[7vw]">
         
         <div ref={headlineRef} className={`max-w-[44vw] transform-gpu will-change-transform ${isAr ? 'text-right' : 'text-left'}`}>
-          {/* التعديل: العناوين كحلي داكن */}
           <h2 className="font-heading text-section font-black text-[#0F172A] leading-[1.05] mb-6 drop-shadow-sm">
             {isAr ? 'من الهيكل الخرساني' : 'Structure to'}<br />
             <span className="text-[#FF6A00]">{isAr ? 'إلى التشطيبات.' : 'finishes.'}</span>
@@ -71,7 +79,6 @@ const ConstructionSection = ({ className = '' }: ConstructionSectionProps) => {
           </p>
         </div>
 
-        {/* التعديل: الكارت بقى أبيض ناصع مع Shadow وشلت الـ glass-card الغامق */}
         <div ref={cardRef} className={`absolute top-[16vh] w-full max-w-[400px] lg:w-[34vw] bg-white rounded-2xl shadow-xl border border-gray-200 p-6 lg:p-8 transform-gpu will-change-transform ${isAr ? 'left-6 lg:left-[6vw] text-right' : 'right-6 lg:right-[6vw]'}`}>
           <h3 className={`font-heading text-2xl text-[#0F172A] mb-6 border-b border-gray-100 pb-4 ${isAr ? 'font-black' : 'font-bold'}`}>
             {isAr ? 'المقاولات العامة' : 'General Construction'}
