@@ -26,7 +26,6 @@ export default function App() {
   const [showPortal, setShowPortal] = useState(false);
   const [isArabic, setIsArabic] = useState(true);
 
-  // التعديل الجوهري: فصلنا دالة جلب البيانات عشان نستخدمها بدون Refresh
   const loadUserData = async () => {
     setLoading(true);
     const { data: { session } } = await supabase.auth.getSession();
@@ -43,12 +42,10 @@ export default function App() {
     setLoading(false);
   };
 
-  // تشغيل الدالة أول مرة الموقع يفتح
   useEffect(() => {
     loadUserData();
   }, []);
 
-  // مراقب لغة الموقع
   useEffect(() => {
     const detectLanguage = () => {
       const computedDir = window.getComputedStyle(document.body).direction;
@@ -77,20 +74,20 @@ export default function App() {
     };
   }, []);
 
-  // دالة الخروج السلسة
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setSession(null);
     setUserRole(null);
-    setShowPortal(false); // نرجعه للموقع الأساسي بعد ما يقفل
+    setShowPortal(false);
   };
 
   if (!showPortal) {
     return (
-      <div className="font-sans antialiased text-slate-200 bg-[#0a0f1c]">
+      // التعديل هنا: شيلنا bg-[#0a0f1c] وضفنا overflow-x-hidden و bg-white
+      <div className="font-sans antialiased text-slate-800 bg-white overflow-x-hidden w-full relative">
         <Navigation />
         
-        <main>
+        <main className="w-full">
           <HeroSection />
           <CapabilitiesSection />
           <MEPSection />
@@ -136,7 +133,6 @@ export default function App() {
         >
           <span>⬅️</span> {isArabic ? 'العودة للموقع' : 'Back to Site'}
         </button>
-        {/* التعديل هنا: بننده على الدالة بدل ما نعمل Refresh للمتصفح */}
         <Login onLoginSuccess={loadUserData} />
       </div>
     );
@@ -146,7 +142,7 @@ export default function App() {
     <div dir="rtl" className="min-h-screen bg-gray-50">
       <div className="bg-blue-950 px-4 py-2 text-left">
          <button onClick={() => setShowPortal(false)} className="text-blue-300 hover:text-white text-sm font-bold">
-            العودة لواجهة الموقع 🏠
+           العودة لواجهة الموقع 🏠
          </button>
       </div>
 
